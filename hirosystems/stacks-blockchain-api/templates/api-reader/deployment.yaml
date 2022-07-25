@@ -1,0 +1,229 @@
+# Deploy read-only stacks API if Values.apiReader.enabled == true
+{{- if .Values.apiReader.enabled }}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}-reader
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: reader
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.apiReader.autoscaling.enabled }}
+  replicas: {{ .Values.apiReader.replicaCount }}
+  {{- end }}
+  {{- if .Values.apiReader.updateStrategy }}
+  strategy: {{- toYaml .Values.apiReader.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: stacks-blockchain-api
+      hiro.so/stacks-blockchain-api-role: reader
+  template:
+    metadata:
+      {{- if .Values.apiReader.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: stacks-blockchain-api
+        hiro.so/stacks-blockchain-api-role: reader
+        {{- if .Values.apiReader.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "stacksBlockchainApi.serviceAccountName" . }}
+      {{- include "stacksBlockchainApi.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.apiReader.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apiReader.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.apiReader.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apiReader.podAffinityPreset "component" "stacks-blockchain-api" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apiReader.podAntiAffinityPreset "component" "stacks-blockchain-api" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.apiReader.nodeAffinityPreset.type "key" .Values.apiReader.nodeAffinityPreset.key "values" .Values.apiReader.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.apiReader.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.apiReader.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apiReader.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apiReader.priorityClassName }}
+      priorityClassName: {{ .Values.apiReader.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.apiReader.schedulerName }}
+      schedulerName: {{ .Values.apiReader.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.apiReader.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apiReader.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.apiReader.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apiReader.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.apiReader.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.apiReader.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: stacks-blockchain-api-reader
+          image: {{ template "stacksBlockchainApi.image" . }}
+          imagePullPolicy: {{ .Values.apiReader.image.pullPolicy }}
+          {{- if .Values.apiReader.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiReader.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.apiReader.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.apiReader.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: STACKS_READ_ONLY_MODE
+              value: "true"
+            - name: STACKS_API_LOG_LEVEL
+              value: {{ ternary "debug" "info" (or .Values.apiReader.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: STACKS_CHAIN_ID
+              {{- if eq .Values.blockchainNetwork "mainnet" }}
+              value: "0x00000001"
+              {{- else }}
+              value: "0x80000000"
+              {{- end }}
+            - name: STACKS_CORE_EVENT_PORT
+              value: {{ default "3700" .Values.apiReader.containerPorts.socket | quote }}
+            - name: STACKS_CORE_EVENT_HOST
+              value: {{  default "0.0.0.0" .Values.apiReader.config.bindAddress | quote }}
+            - name: STACKS_BLOCKCHAIN_API_PORT
+              value: {{ default "3999" .Values.apiReader.containerPorts.api | quote }}
+            - name: STACKS_BLOCKCHAIN_API_HOST
+              value: {{ default "0.0.0.0" .Values.apiReader.config.bindAddress | quote }}
+            - name: STACKS_PROFILER_PORT
+              value: {{ default "9119" .Values.apiReader.containerPorts.profiler | quote }}
+            - name: STACKS_CORE_RPC_HOST
+              value: {{ include "stacksBlockchain.service.name" (index .Subcharts "stacks-blockchain") }}
+            - name: STACKS_CORE_RPC_PORT
+              value: {{ include "stacksBlockchain.service.ports.rpc" (index .Subcharts "stacks-blockchain") | quote }}
+            - name: STACKS_API_ENABLE_FT_METADATA
+              value: {{ default "0" .Values.apiReader.config.ftMetadata | quote }}
+            - name: STACKS_API_ENABLE_NFT_METADATA
+              value: {{ default "0" .Values.apiReader.config.nftMetadata | quote }}
+            - name: STACKS_ADDRESS_CACHE_SIZE
+              value: {{ default "50000" .Values.apiReader.config.stacksAddressCacheSize | quote }}
+            - name: PG_DATABASE
+              value: {{ include "postgresql.database" .Subcharts.postgresql }}
+            - name: PG_SCHEMA
+              value: {{ include "postgresql.database" .Subcharts.postgresql }}
+            - name: PG_PRIMARY_HOST
+              value: {{ include "postgresql.primary.fullname" .Subcharts.postgresql }}
+            - name: PG_HOST
+              value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
+            - name: PG_PORT
+              value: {{ include "postgresql.service.port" .Subcharts.postgresql | quote }}
+            - name: PG_USER
+              value: {{ include "stacksBlockchainApi.postgresql.username" . }}
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: {{ include "postgresql.adminPasswordKey" .Subcharts.postgresql }}
+                  name: {{ include "postgresql.secretName" .Subcharts.postgresql }}
+            - name: PG_APPLICATION_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PG_CONNECTION_POOL_MAX
+              value: {{ default "50" .Values.apiReader.config.pgConnectionPoolMax | quote }}
+            {{- if .Values.cdn.enabled }}
+            - name: IMGIX_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: {{ default "token" .Values.cdn.tokenSecretKey }}
+                  name: {{ include "stacksBlockchainApi.cdn.secretName" . }}
+            - name: IMGIX_DOMAIN
+              value: {{ .Values.cdn.domain }}
+            - name: STACKS_API_IMAGE_CACHE_PROCESSOR
+              value: {{ .Values.cdn.imageCacheProcessorScript }}
+            {{- end }}
+            - name: NODE_ENV
+              value: production
+            {{- if .Values.apiReader.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.apiReader.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.apiReader.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.apiReader.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.apiReader.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.apiReader.resources }}
+          resources: {{- toYaml .Values.apiReader.resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http-api
+              containerPort: {{ .Values.apiReader.containerPorts.api }}
+            - name: tcp-socket
+              containerPort: {{ .Values.apiReader.containerPorts.socket }}
+            - name: tcp-profiler
+              containerPort: {{ .Values.apiReader.containerPorts.profiler }}
+              {{- if .Values.metrics.enabled }}
+            - name: tcp-metrics
+              containerPort: {{ .Values.apiReader.containerPorts.metrics }}
+              {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.apiReader.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.apiReader.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http-api
+          {{- else if .Values.apiReader.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.apiReader.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.apiReader.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http-api
+          {{- else if .Values.apiReader.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.apiReader.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.apiReader.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http-api
+          {{- else if .Values.apiReader.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.apiReader.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.apiReader.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.apiReader.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.apiReader.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.apiReader.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

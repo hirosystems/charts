@@ -1,0 +1,1088 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+blockchainNetwork: mainnet
+
+## @section Stacks Blockchain API Writer Parameters
+
+## Deploys a Stacks Blockchain API which receives, processes, and stores events
+## from a Stacks Blockchain node into a Postgres database
+##
+apiWriter:
+  enabled: true
+  config:
+    dataArchiveUrl: ""
+    # dataArchiveUrl: https://storage.googleapis.com/blockstack-publish/archiver-main/follower/mainnet-follower-latest.tar.gz
+    replayEvents: false
+    exportEvents: false
+    enableFtMetadata: true
+    enableNftMetadata: false
+    bindAddress: "0.0.0.0"
+    enableTokenMetadataStrictMode: true
+    pgConnectionPoolMax: "50"
+    stacksAddressCacheSize: "50000"
+  ## Hiro Systems Stacks Blockchain API Writer image
+  ## ref: https://hub.docker.com/r/hirosystems/stacks-blockchain-api/tags/
+  ## @param apiWriter.image.registry Stacks Blockchain API Writer image registry
+  ## @param apiWriter.image.repository Stacks Blockchain API Writer image repository
+  ## @param apiWriter.image.tag Stacks Blockchain API Writer image tag (immutable tags are recommended)
+  ## @param apiWriter.image.pullPolicy Stacks Blockchain API Writer image pull policy
+  ## @param apiWriter.image.pullSecrets Stacks Blockchain API Writer image pull secrets
+  ## @param apiWriter.image.debug Enable Stacks Blockchain API Writer image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: hirosystems/stacks-blockchain-api
+    tag: 4.0.3
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param apiWriter.replicaCount Number of Stacks Blockchain API Writer replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param apiWriter.containerPorts.http Stacks Blockchain API Writer HTTP container port
+  ## @param apiWriter.containerPorts.https Stacks Blockchain API Writer HTTPS container port
+  ##
+  containerPorts:
+    api: 3999
+    socket: 3700
+    profiler: 9119
+    metrics: 9153
+  ## Configure extra options for Stacks Blockchain API Writer containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param apiWriter.livenessProbe.enabled Enable livenessProbe on Stacks Blockchain API Writer containers
+  ## @param apiWriter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param apiWriter.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param apiWriter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param apiWriter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param apiWriter.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param apiWriter.readinessProbe.enabled Enable readinessProbe on Stacks Blockchain API Writer containers
+  ## @param apiWriter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param apiWriter.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param apiWriter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param apiWriter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param apiWriter.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param apiWriter.startupProbe.enabled Enable startupProbe on Stacks Blockchain API Writer containers
+  ## @param apiWriter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param apiWriter.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param apiWriter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param apiWriter.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param apiWriter.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param apiWriter.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param apiWriter.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param apiWriter.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Stacks Blockchain API Writer resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param apiWriter.resources.limits The resources limits for the Stacks Blockchain API Writer containers
+  ## @param apiWriter.resources.requests The requested resources for the Stacks Blockchain API Writer containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param apiWriter.podSecurityContext.enabled Enabled Stacks Blockchain API Writer pods' Security Context
+  ## @param apiWriter.podSecurityContext.fsGroup Set Stacks Blockchain API Writer pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param apiWriter.containerSecurityContext.enabled Enabled Stacks Blockchain API Writer containers' Security Context
+  ## @param apiWriter.containerSecurityContext.runAsUser Set Stacks Blockchain API Writer containers' Security Context runAsUser
+  ## @param apiWriter.containerSecurityContext.runAsNonRoot Set Stacks Blockchain API Writer containers' Security Context runAsNonRoot
+  ## @param apiWriter.containerSecurityContext.readOnlyRootFilesystem Set Stacks Blockchain API Writer containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+  service:
+    ## @param service.type Stacks Blockchain API Writer service type
+    ##
+    type: ClusterIP
+    ## @param service.ports.http Stacks Blockchain API Writer service HTTP port
+    ## @param service.ports.https Stacks Blockchain API Writer service HTTPS port
+    ##
+    ports:
+      api: 3999
+      socket: 3700
+      profiler: 9119
+      metrics: 9153
+    ## Node ports to expose
+    ## @param service.nodePorts.http Node port for HTTP
+    ## @param service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      api: ""
+      socket: ""
+      profiler: ""
+      metrics: ""
+    ## @param service.clusterIP Stacks Blockchain API Writer service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param service.loadBalancerIP Stacks Blockchain API Writer service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param service.loadBalancerSourceRanges Stacks Blockchain API Writer service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param service.externalTrafficPolicy Stacks Blockchain API Writer service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param service.annotations Additional custom annotations for Stacks Blockchain API Writer service
+    ##
+    annotations: {}
+    ## @param service.extraPorts Extra ports to expose in Stacks Blockchain API Writer service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+  ## @param apiWriter.existingConfigmap The name of an existing ConfigMap with your custom configuration for Stacks Blockchain API Writer
+  ##
+  existingConfigmap:
+  ## @param apiWriter.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param apiWriter.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param apiWriter.hostAliases Stacks Blockchain API Writer pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param apiWriter.podLabels Extra labels for Stacks Blockchain API Writer pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels:
+    sidecar.istio.io/rewriteAppHTTPProbers: "false"
+  ## @param apiWriter.podAnnotations Annotations for Stacks Blockchain API Writer pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param apiWriter.podAffinityPreset Pod affinity preset. Ignored if `apiWriter.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param apiWriter.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apiWriter.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param apiWriter.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param apiWriter.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param apiWriter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  nodeAffinityPreset:
+    ## @param apiWriter.nodeAffinityPreset.type Node affinity preset type. Ignored if `apiWriter.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param apiWriter.nodeAffinityPreset.key Node label key to match. Ignored if `apiWriter.affinity` is set
+    ##
+    key: ""
+    ## @param apiWriter.nodeAffinityPreset.values Node label values to match. Ignored if `apiWriter.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## @section Persistence Parameters
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    data:
+      ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+      ##
+      enabled: true
+      ## @param persistence.mountPath Path to mount the volume at.
+      ##
+      mountPath: /hirosystems/api-writer/data
+      ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+      ##
+      subPath: ""
+      ## @param persistence.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param persistence.annotations Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param persistence.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param persistence.size Size of data volume
+      ##
+      size: 50Gi
+      ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+      ##
+      existingClaim: ""
+      ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+      ## If set, the PVC can't have a PV dynamically provisioned for it
+      ## E.g.
+      ## selector:
+      ##   matchLabels:
+      ##     app: my-app
+      ##
+      selector: {}
+      ## @param persistence.dataSource Custom PVC data source
+      ##
+      dataSource: {}
+    bns:
+      ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+      ##
+      enabled: true
+      ## @param persistence.mountPath Path to mount the volume at.
+      ##
+      mountPath: /hirosystems/api-writer/bns
+      ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+      ##
+      subPath: ""
+      ## @param persistence.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param persistence.annotations Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param persistence.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param persistence.size Size of data volume
+      ##
+      size: 10Gi
+      ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+      ##
+      existingClaim: ""
+      ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+      ## If set, the PVC can't have a PV dynamically provisioned for it
+      ## E.g.
+      ## selector:
+      ##   matchLabels:
+      ##     app: my-app
+      ##
+      selector: {}
+      ## @param persistence.dataSource Custom PVC data source
+      ##
+      dataSource: {}
+
+  ## @section Init Container Parameters
+
+  ## 'volumePermissions' init container parameters
+  ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+  ##   based on the *podSecurityContext/*containerSecurityContext parameters
+  ##
+  volumePermissions:
+    ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+    ##
+    enabled: false
+    ## Bitnami Shell image
+    ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+    ## @param volumePermissions.image.registry Bitnami Shell image registry
+    ## @param volumePermissions.image.repository Bitnami Shell image repository
+    ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+    ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+    ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/bitnami-shell
+      tag: 11-debian-11-r19
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Init container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param volumePermissions.resources.limits The resources limits for the init container
+    ## @param volumePermissions.resources.requests The requested resources for the init container
+    ##
+    resources:
+      limits: {}
+      requests: {}
+    ## Init container Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+    ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+    ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+    ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+    ##
+    containerSecurityContext:
+      runAsUser: 0
+
+## Deploys a read-only API node which only reads from the PG DB, and does not accept
+## events from a stacks-blockchain node. In a HA setup, the reader is typically exposed
+## to the internet and serves traffic, while the writer is not exposed.
+##
+apiReader:
+  enabled: true
+  config:
+    bindAddress: "0.0.0.0"
+    ftMetadata: true
+    nftMetadata: false
+    pgConnectionPoolMax: "50"
+    stacksAddressCacheSize: "50000"
+  ## Hiro Systems stacks-blockchain-api image
+  ## ref: https://hub.docker.com/r/hirosystems/stacks-blockchain-api/tags/
+  ## @param api-reader.image.registry stacks-blockchain-api image registry
+  ## @param api-reader.image.repository stacks-blockchain-api image repository
+  ## @param api-reader.image.tag stacks-blockchain-api image tag (immutable tags are recommended)
+  ## @param api-reader.image.pullPolicy stacks-blockchain-api image pull policy
+  ## @param api-reader.image.pullSecrets stacks-blockchain-api image pull secrets
+  ## @param api-reader.image.debug Enable stacks-blockchain-api image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: hirosystems/stacks-blockchain-api
+    tag: 4.0.3
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param api-reader.replicaCount Number of stacks-blockchain-api replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param api-reader.containerPorts.http stacks-blockchain-api HTTP container port
+  ## @param api-reader.containerPorts.https stacks-blockchain-api HTTPS container port
+  ##
+  containerPorts:
+    api: 3999
+    socket: 3700
+    profiler: 9119
+    metrics: 9153
+  ## Configure extra options for stacks-blockchain-api containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param api-reader.livenessProbe.enabled Enable livenessProbe on stacks-blockchain-api containers
+  ## @param api-reader.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param api-reader.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param api-reader.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param api-reader.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param api-reader.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param api-reader.readinessProbe.enabled Enable readinessProbe on stacks-blockchain-api containers
+  ## @param api-reader.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param api-reader.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param api-reader.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param api-reader.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param api-reader.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param api-reader.startupProbe.enabled Enable startupProbe on stacks-blockchain-api containers
+  ## @param api-reader.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param api-reader.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param api-reader.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param api-reader.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param api-reader.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param api-reader.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param api-reader.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param api-reader.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## stacks-blockchain-api resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param api-reader.resources.limits The resources limits for the stacks-blockchain-api containers
+  ## @param api-reader.resources.requests The requested resources for the stacks-blockchain-api containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param api-reader.podSecurityContext.enabled Enabled stacks-blockchain-api pods' Security Context
+  ## @param api-reader.podSecurityContext.fsGroup Set stacks-blockchain-api pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param api-reader.containerSecurityContext.enabled Enabled stacks-blockchain-api containers' Security Context
+  ## @param api-reader.containerSecurityContext.runAsUser Set stacks-blockchain-api containers' Security Context runAsUser
+  ## @param api-reader.containerSecurityContext.runAsNonRoot Set stacks-blockchain-api containers' Security Context runAsNonRoot
+  ## @param api-reader.containerSecurityContext.readOnlyRootFilesystem Set stacks-blockchain-api containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+  ## @param apiReader.existingConfigmap The name of an existing ConfigMap with your custom configuration for Stacks Blockchain API Reader
+  ##
+  existingConfigmap:
+  ## @param apiReader.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param apiReader.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param apiReader.hostAliases Stacks Blockchain API Reader pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param apiReader.podLabels Extra labels for Stacks Blockchain API Reader pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+    # sidecar.istio.io/rewriteAppHTTPProbers: "false"
+  ## @param apiReader.podAnnotations Annotations for Stacks Blockchain API Reader pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param apiReader.podAffinityPreset Pod affinity preset. Ignored if `apiReader.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param apiReader.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apiReader.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param apiReader.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param apiReader.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param apiReader.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param apiReader.autoscaling.enabled Enable autoscaling for apiReader
+  ## @param apiReader.autoscaling.minReplicas Minimum number of apiReader replicas
+  ## @param apiReader.autoscaling.maxReplicas Maximum number of apiReader replicas
+  ## @param apiReader.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param apiReader.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPU: 80
+    targetMemory: 80
+  ## Node apiReader.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param apiReader.nodeAffinityPreset.type Node affinity preset type. Ignored if `apiReader.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param apiReader.nodeAffinityPreset.key Node label key to match. Ignored if `apiReader.affinity` is set
+    ##
+    key: ""
+    ## @param apiReader.nodeAffinityPreset.values Node label values to match. Ignored if `apiReader.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param apiReader.affinity Affinity for Stacks Blockchain API Reader pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `apiReader.podAffinityPreset`, `apiReader.podAntiAffinityPreset`, and `apiReader.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param apiReader.nodeSelector Node labels for Stacks Blockchain API Reader pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param apiReader.tolerations Tolerations for Stacks Blockchain API Reader pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param apiReader.updateStrategy.type Stacks Blockchain API Reader statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param apiReader.priorityClassName Stacks Blockchain API Reader pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param apiReader.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param apiReader.schedulerName Name of the k8s scheduler (other than default) for Stacks Blockchain API Reader pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param apiReader.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param apiReader.lifecycleHooks for the Stacks Blockchain API Reader container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param apiReader.extraEnvVars Array with extra environment variables to add to Stacks Blockchain API Reader nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param apiReader.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Stacks Blockchain API Reader nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param apiReader.extraEnvVarsSecret Name of existing Secret containing extra env vars for Stacks Blockchain API Reader nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param apiReader.extraVolumes Optionally specify extra list of additional volumes for the Stacks Blockchain API Reader pod(s)
+  ##
+  extraVolumes: []
+  ## @param apiReader.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Stacks Blockchain API Reader container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param apiReader.sidecars Add additional sidecar containers to the Stacks Blockchain API Reader pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param apiReader.initContainers Add additional init containers to the Stacks Blockchain API Reader pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  service:
+    ## @param service.type Stacks Blockchain API Reader service type
+    ##
+    type: ClusterIP
+    ## @param service.ports.http Stacks Blockchain API Reader service HTTP port
+    ## @param service.ports.https Stacks Blockchain API Reader service HTTPS port
+    ##
+    ports:
+      api: 3999
+      socket: 3700
+      profiler: 9119
+      metrics: 9153
+    ## Node ports to expose
+    ## @param service.nodePorts.http Node port for HTTP
+    ## @param service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      api: ""
+      socket: ""
+      profiler: ""
+      metrics: ""
+    ## @param service.clusterIP Stacks Blockchain API Reader service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param service.loadBalancerIP Stacks Blockchain API Reader service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param service.loadBalancerSourceRanges Stacks Blockchain API Reader service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param service.externalTrafficPolicy Stacks Blockchain API Reader service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param service.annotations Additional custom annotations for Stacks Blockchain API Reader service
+    ##
+    annotations: {}
+    ## @param service.extraPorts Extra ports to expose in Stacks Blockchain API Reader service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+## Configure a CDN to cache NFT images
+##
+cdn:
+  enabled: false
+  existingSecret: ""
+  tokenSecretKey: "token"
+  token: ""
+  domain: ""
+  imageCacheProcessorScript: "./config/token-metadata-image-cache-imgix.js"
+
+## @section Traffic Exposure Parameters
+
+## Stacks Blockchain API ingress parameters
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+## Will create an ingress for the Stacks Blockchain API Reader if enabled
+## Other will create an ingress for the Stacks Blockchain API Writer
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Stacks Blockchain API
+  ##
+  enabled: true
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: stacks-node-api.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: true
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: stacks-node-api.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - stacks-node-api.local
+  ##   secretName: stacks-node-api.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: stacks-node-api.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Other Parameters
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/hirosystems/charts/tree/master/hirosystems/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+
+## Stacks Blockchain Subchart
+##
+stacks-blockchain:
+  enabled: true
+  # config: |
+  #   [node]
+  #   rpc_bind = "0.0.0.0:{{ .Values.containerPorts.rpc }}"
+  #   p2p_bind = "0.0.0.0:{{ .Values.containerPorts.p2p }}"
+  #   bootstrap_node = "02da7a464ac770ae8337a343670778b93410f2f3fef6bea98dd1c3e9224459d36b@seed-0.mainnet.stacks.co:20444,02afeae522aab5f8c99a00ddf75fbcb4a641e052dd48836408d9cf437344b63516@seed-1.mainnet.stacks.co:20444,03652212ea76be0ed4cd83a25c06e57819993029a7b9999f7d63c36340b34a4e62@seed-2.mainnet.stacks.co:20444"
+  #   prometheus_bind = "0.0.0.0:{{ .Values.containerPorts.metrics }}"
+  #   working_dir = "{{ .Values.persistence.mountPath }}"
+
+  #   [burnchain]
+  #   chain = "bitcoin"
+  #   mode = "mainnet"
+  #   peer_host = "bitcoind.stacks.co"
+  #   username = "blockstack"
+  #   password = "blockstacksystem"
+  #   rpc_port = 8332
+  #   peer_port = 8333
+
+  #   [[events_observer]]
+  #   endpoint = "stacks-blockchain-api-writer:3700"
+  #   retry_count = 255
+  #   events_keys = ["*"]
+
+## Postgresql Subchart
+##
+postgresql:
+  enabled: true
+  ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+  ##
+  extraDeploy:
+    - |
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: {{ template "common.names.fullname" . }}-all
+        namespace: {{ include "common.names.namespace" . | quote }}
+        labels: {{- include "common.labels.standard" . | nindent 4 }}
+      spec:
+        ports:
+        - name: tcp-postgresql
+          port: 5432
+          protocol: TCP
+          targetPort: tcp-postgresql
+        selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+        type: ClusterIP
+
+  ## Authentication parameters
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run
+  ##
+  auth:
+    database: stacks_blockchain_api
+  primary:
+    initdb:
+      scripts:
+        create_schema.sql: |
+          revoke all on database stacks_blockchain_api from public;
+          grant all privileges on database stacks_blockchain_api to postgres;
+          \c stacks_blockchain_api;
+          drop schema if exists stacks_blockchain_api cascade;
+          alter database stacks_blockchain_api set default_transaction_read_only = off;
+          alter database stacks_blockchain_api owner to postgres;
+          create schema if not exists stacks_blockchain_api authorization postgres;
+          alter database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
+          alter user postgres in database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
+          revoke all on schema public from public;
+          revoke all on schema stacks_blockchain_api from public;
+          grant all on schema stacks_blockchain_api to postgres;
+    persistence:
+      size: 50Gi

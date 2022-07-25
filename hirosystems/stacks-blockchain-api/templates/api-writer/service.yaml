@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: writer
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.apiWriter.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.apiWriter.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.apiWriter.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.apiWriter.service.type }}
+  {{- if and .Values.apiWriter.service.clusterIP (eq .Values.apiWriter.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.apiWriter.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.apiWriter.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.apiWriter.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.apiWriter.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.apiWriter.service.type "LoadBalancer") (eq .Values.apiWriter.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.apiWriter.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.apiWriter.service.type "LoadBalancer") (not (empty .Values.apiWriter.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.apiWriter.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.apiWriter.service.type "LoadBalancer") (not (empty .Values.apiWriter.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.apiWriter.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-api
+      port: {{ .Values.apiWriter.service.ports.api }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-socket
+      port: {{ .Values.apiWriter.service.ports.socket }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-profiler
+      port: {{ .Values.apiWriter.service.ports.profiler }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.apiWriter.service.ports.metrics }}
+      protocol: TCP
+      {{- end }}
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}    {{- if .Values.apiWriter.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: writer

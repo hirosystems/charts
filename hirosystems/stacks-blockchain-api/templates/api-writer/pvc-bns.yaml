@@ -1,0 +1,37 @@
+{{- if and .Values.apiWriter.enabled .Values.apiWriter.persistence.bns.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" . }}-bns
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: writer
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.apiWriter.persistence.bns.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.apiWriter.persistence.bns.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.apiWriter.persistence.bns.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.apiWriter.persistence.bns.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.apiWriter.persistence.bns.size | quote }}
+  {{- if .Values.apiWriter.persistence.bns.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.apiWriter.persistence.bns.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.bns "global" .Values.global) | nindent 2 }}
+{{- end -}}
