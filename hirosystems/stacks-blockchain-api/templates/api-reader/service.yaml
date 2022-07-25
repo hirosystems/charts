@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}-reader
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: reader
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.apiReader.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.apiReader.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.apiReader.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.apiReader.service.type }}
+  {{- if and .Values.apiReader.service.clusterIP (eq .Values.apiReader.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.apiReader.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.apiReader.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.apiReader.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.apiReader.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.apiReader.service.type "LoadBalancer") (eq .Values.apiReader.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.apiReader.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.apiReader.service.type "LoadBalancer") (not (empty .Values.apiReader.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.apiReader.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.apiReader.service.type "LoadBalancer") (not (empty .Values.apiReader.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.apiReader.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-api
+      port: {{ .Values.apiReader.service.ports.api }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-socket
+      port: {{ .Values.apiReader.service.ports.socket }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-profiler
+      port: {{ .Values.apiReader.service.ports.profiler }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.apiReader.service.ports.metrics }}
+      protocol: TCP
+      {{- end }}
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.apiReader.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: reader

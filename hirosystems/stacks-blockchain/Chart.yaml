@@ -1,0 +1,30 @@
+annotations:
+  category: Blockchain
+apiVersion: v2
+appVersion: 2.05.0.2.2
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Stacks Blockchain Node
+engine: gotpl
+home: https://github.com/hirosystems/stacks-blockchain
+icon: https://docs.hiro.so/img/footer-logo-light.svg
+keywords:
+  - stacks
+  - stx
+  - blockchain
+  - hiro
+  - bitcoin
+  - bitcoind
+  - btc
+maintainers:
+  - name: Hiro Systems
+    url: https://github.com/hirosystems/charts
+name: stacks-blockchain
+sources:
+  - https://github.com/stacks-network/stacks-blockchain
+  - https://docs.stacks.co/
+version: 0.1.0
