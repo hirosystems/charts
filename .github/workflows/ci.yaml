@@ -1,0 +1,33 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    name: Release Helm Charts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "Hiro DevOps"
+          git config user.email "45208873+blockstack-devops@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Release Hiro Systems charts
+        uses: helm/chart-releaser-action@v1.4.0
+        with:
+          charts_dir: hirosystems
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
