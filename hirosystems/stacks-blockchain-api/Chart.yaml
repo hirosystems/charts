@@ -5,8 +5,7 @@ appVersion: 4.0.3
 dependencies:
   - condition: stacks-blockchain.enabled
     name: stacks-blockchain
-    repository: file://../stacks-blockchain
-    # repository: https://charts.hiro.so/hirosystems
+    repository: https://charts.hiro.so/hirosystems
     tags:
       - hirosystems-stacks-blockchain
     version: 0.x.x
