@@ -1,8 +1,6 @@
-# Stacks Blockchain
+# Stacks Blockchain API
 
-The Stacks Blockchain 2.0 is a layer-1 blockchain that connects to Bitcoin for security and enables decentralized apps and predictable smart contracts. Stacks 2.0 implements Proof of Transfer (PoX) mining that anchors to Bitcoin security. Leader election happens at the Bitcoin blockchain and Stacks (STX) miners write new blocks on the separate Stacks blockchain. With PoX there is no need to modify Bitcoin to enable smart contracts and apps around it. See this page for more details and resources.
-
-
+An API for the Stacks 2.0 Blockchain.
 
 ## TL;DR
 

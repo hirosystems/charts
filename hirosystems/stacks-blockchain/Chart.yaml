@@ -10,7 +10,7 @@ dependencies:
     version: 1.x.x
 description: Stacks Blockchain Node
 engine: gotpl
-home: https://github.com/hirosystems/stacks-blockchain
+home: https://github.com/stacks-network/stacks-blockchain
 icon: https://docs.hiro.so/img/footer-logo-light.svg
 keywords:
   - stacks
