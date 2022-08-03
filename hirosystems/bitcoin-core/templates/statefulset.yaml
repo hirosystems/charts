@@ -144,9 +144,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -conf=/hirosystems/bitcoin.conf
+            - -conf=/hirosystems/config/bitcoin.conf
           {{- end }}
           env:
+            - name: BITCOIN_DATA
+              value: {{ default "/hirosystems/data" .Values.persistence.mountPath }}/.bitcoin
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -204,7 +206,7 @@ spec:
               {{- end }}
               readOnly: false
             - name: config
-              mountPath: /hirosystems
+              mountPath: /hirosystems/config
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

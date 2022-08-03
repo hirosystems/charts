@@ -106,10 +106,11 @@ existingSecretForConfig: ""
 ## @param config bitcoin-core bitcoin.conf settings
 ##
 config: |
-  datadir={{ default "/hirosystems/data" .Values.persistence.mountPath }}
   server=1
   txindex=1
-  
+
+  # testnet=1
+
   rpcserialversion=0
   rpcuser=hirosystems
   rpcpassword=hirosystems
@@ -129,8 +130,14 @@ config: |
 ## @param containerPorts.p2p bitcoin-core P2P container port
 ##
 containerPorts:
-  rpc: 20443
-  p2p: 20444
+  ## bitcoin network: mainnet
+  ##
+  rpc: 8332
+  p2p: 8333
+  ## bitcoin network: testnet
+  ##
+  # rpc: 18332
+  # p2p: 18333
 ## Configure extra options for bitcoin-core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on bitcoin-core containers
@@ -198,7 +205,7 @@ resources:
 ## @param podSecurityContext.fsGroup Set bitcoin-core pod's Security Context fsGroup
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -208,7 +215,7 @@ podSecurityContext:
 ## @param containerSecurityContext.readOnlyRootFilesystem Set bitcoin-core containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
-  enabled: true
+  enabled: false
   runAsUser: 1001
   runAsNonRoot: true
   readOnlyRootFilesystem: false
@@ -381,8 +388,14 @@ service:
   ## @param service.ports.https bitcoin-core service HTTPS port
   ##
   ports:
-    rpc: 20443
-    p2p: 20444
+    ## bitcoin network: mainnet
+    ##
+    rpc: 8332
+    p2p: 8333
+    ## bitcoin network: testnet
+    ##
+    # rpc: 18332
+    # p2p: 18333
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
