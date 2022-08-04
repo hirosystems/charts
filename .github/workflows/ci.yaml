@@ -25,9 +25,15 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v3
 
+      - name: Add Helm dependency repos
+        run: |
+          helm repo add hirosystems https://charts.hiro.so/hirosystems
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+
       - name: Release Hiro Systems charts
         uses: helm/chart-releaser-action@v1.4.0
         with:
           charts_dir: hirosystems
+          config: cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

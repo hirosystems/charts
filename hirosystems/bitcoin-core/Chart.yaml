@@ -20,7 +20,7 @@ keywords:
 maintainers:
   - name: Hiro Systems
     url: https://github.com/hirosystems/charts
-name: bitcoind
+name: bitcoin-core
 sources:
   - https://github.com/bitcoin/bitcoin
   - https://github.com/ruimarinho/docker-bitcoin-core
