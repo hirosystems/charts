@@ -109,7 +109,10 @@ config: |
   server=1
   txindex=1
 
-  # testnet=1
+  chain=mainnet
+  # chain=testnet
+  # chain=regtest
+  # chain=signet
 
   rpcserialversion=0
   rpcuser=hirosystems
@@ -138,6 +141,14 @@ containerPorts:
   ##
   # rpc: 18332
   # p2p: 18333
+  ## bitcoin network: regtest
+  ##
+  # rpc: 18443
+  # p2p: 18444
+  ## bitcoin network: signet
+  ##
+  # rpc: 38332
+  # p2p: 38333
 ## Configure extra options for bitcoin-core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on bitcoin-core containers
@@ -396,6 +407,14 @@ service:
     ##
     # rpc: 18332
     # p2p: 18333
+    ## bitcoin network: regtest
+    ##
+    # rpc: 18443
+    # p2p: 18444
+    ## bitcoin network: signet
+    ##
+    # rpc: 38332
+    # p2p: 38333
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
