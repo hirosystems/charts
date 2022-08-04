@@ -1,17 +1,15 @@
-# Stacks Blockchain API
-
-An API for the Stacks 2.0 Blockchain.
+# Bitcoin-core
 
 ## TL;DR
 
 ```console
 $ helm repo add hirosystems https://charts.hiro.so/hirosystems
-$ helm install my-release hirosystems/stacks-blockchain-api
+$ helm install my-release hirosystems/bitcoin-core
 ```
 
 ## Introduction
 
-This chart bootstraps a [Stacks Blockchain API](https://github.com/hirosystems/stacks-blockchain-api) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [bitcoin-core node](https://github.com/bitcoin/bitcoin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -24,10 +22,10 @@ This chart bootstraps a [Stacks Blockchain API](https://github.com/hirosystems/s
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release hirosystems/stacks-blockchain-api
+helm install my-release hirosystems/bitcoin-core
 ```
 
-The command deploys Stacks Blockchain API on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys a bitcoin-core node on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,18 +47,18 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set apiWriter.enable=true \
-  --set apiWriter.image.debug=true \
-  --set apiWriter.image.tag=4.0.3 \
-    hirosystems/stacks-blockchain-api
+  --set image.tag=22.0 \
+  --set image.debug=true \
+  --set replicaCount=2 \
+    hirosystems/bitcoin-core
 ```
 
-The above command enabled the Stacks Blockchain API Writer, sets the image tag to `4.0.3`, and enables `debug` logging.
+The above command sets the bitcoin-core image tag to `22.0`, enables `debug` logging, and deploys two nodes.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml hirosystems/stacks-blockchain-api
+helm install my-release -f values.yaml hirosystems/bitcoin-core
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -85,7 +83,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ## Persistence
 
-The [Stacks Blockchain API](https://github.com/hirosystems/stacks-blockchain-api) image stores the Stacks Blockchain API data and configurations at the `/hirosystems` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [bitcoin-core](https://github.com/ruimarinho/docker-bitcoin-core) image stores the Bitcoin Blockchain data and configurations at the `/hirosystems` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
@@ -101,7 +99,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as the Stacks Blockchain API (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter.
+If additional containers are needed in the same pod as the bitcoin-core pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter.
 
 ### Pod affinity
 
