@@ -1,0 +1,28 @@
+annotations:
+  category: Blockchain
+apiVersion: v2
+appVersion: 22.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Bitcoin Core Node
+engine: gotpl
+home: https://github.com/bitcoin/bitcoin
+icon: https://bitcoin.org/img/icons/opengraph.png?1657703267
+keywords:
+  - bitcoin
+  - bitcoind
+  - btc
+  - blockchain
+maintainers:
+  - name: Hiro Systems
+    url: https://github.com/hirosystems/charts
+name: bitcoind
+sources:
+  - https://github.com/bitcoin/bitcoin
+  - https://github.com/ruimarinho/docker-bitcoin-core
+  - https://bitcoin.org
+version: 0.1.0
