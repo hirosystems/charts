@@ -24,8 +24,20 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-%%Instructions to access the application depending on the serviceType and other considerations%%
+The bitcoin-core node(s) can be accessed via port {{ include "bitcoinCore.service.ports.rpc" . }} on the following DNS names from within your cluster:
+
+{{- if .Values.singleService }}
+    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - connection to bitcoin-core pod(s)
+{{- end }}
+
+{{- if .Values.uniqueServices }}
+{{- $replicaCount := .Values.replicaCount | int }}
+{{- range $i, $e := until $replicaCount }}
+    {{ template "common.names.fullname" $ }}-{{ $i }}.{{ $.Release.Namespace }}.svc.cluster.local - connection to bitcoin-core pod {{ $i }}
+{{- end }}
+{{- end }}
 
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}

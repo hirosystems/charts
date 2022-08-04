@@ -109,8 +109,8 @@ config: |
   server=1
   txindex=1
 
-  chain=mainnet
-  # chain=testnet
+  chain=main
+  # chain=test
   # chain=regtest
   # chain=signet
 
@@ -389,6 +389,12 @@ initContainers: []
 
 ## @section Traffic Exposure Parameters
 
+## @param uniqueServices Create one service connecting to each bitcoin-core pod
+##
+singleService: false
+## @param uniqueServices Create a unique service for each bitcoin-core pod
+##
+uniqueServices: true
 ## bitcoin-core service parameters
 ##
 service:
