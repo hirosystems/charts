@@ -41,7 +41,7 @@ The name of the service to use
 The RPC service port
 */}}
 {{- define "bitcoinCore.service.ports.rpc" -}}
-{{ default "kjhn" .Values.service.ports.rpc }}
+{{ default 8332 .Values.service.ports.rpc }}
 {{- end -}}
 
 {{/*
