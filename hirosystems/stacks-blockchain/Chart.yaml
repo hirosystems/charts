@@ -27,4 +27,4 @@ name: stacks-blockchain
 sources:
   - https://github.com/stacks-network/stacks-blockchain
   - https://docs.stacks.co/
-version: 0.1.1
+version: 0.1.2

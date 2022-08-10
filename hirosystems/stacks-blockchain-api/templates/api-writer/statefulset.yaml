@@ -153,9 +153,9 @@ spec:
             - |
               if [ -z "$(ls -A "${DATA_DIR}" | grep -v "lost+found")" ]; then
                 echo "Downloading archive"
-                wget ${ARCHIVE_URL} -O ${DATA_DIR}/stacks-node-events.tar.gz
-                tar zxvf ${DATA_DIR}/stacks-node-events.tar.gz -C ${DATA_DIR}
-                rm -f ${DATA_DIR}/stacks-node-events.tar.gz
+                wget ${ARCHIVE_URL} -O ${DATA_DIR}/archive.tar.gz
+                tar zxvf ${DATA_DIR}/archive.tar.gz -C ${DATA_DIR}
+                rm -f ${DATA_DIR}/archive.tar.gz
               else
                 echo "Previous data found. Exiting."
               fi

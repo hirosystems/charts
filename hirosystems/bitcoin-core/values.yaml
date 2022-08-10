@@ -91,13 +91,10 @@ image:
   ## Enable debug mode
   ##
   debug: true
-  ## Enable JSON logs
-  ##
-  jsonLogs: true
 ## @param replicaCount Number of bitcoin-core replicas to deploy
 ##
 replicaCount: 1
-## @param dataArchiveUrl Specify a URL from which to download the bitcoin chainstate before launching bitcoin-core
+## @param dataArchiveUrl Specify a URL from which to download a tar.gz archive of the bitcoin chainstate before launching bitcoin-core
 ##
 dataArchiveUrl: ""
 ## @param existingSecretForConfig Specify an existing secret containing bitcoin-core config.toml settings
