@@ -20,11 +20,21 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup scripts execute this command:
 
-    %%ENTRYPOINT and CMD from main container%%
+    node ./lib/index.js
 
 {{- else }}
 
-%%Instructions to access the application depending on the serviceType and other considerations%%
+{{- if .Values.apiWriter.enabled }}
+The stacks-blockchain-api writer node(s) can be accessed via port {{ include "stacksBlockchainApi.apiWriter.service.ports.api" . }} on the following DNS names from within your cluster:
+
+    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - connection to stacks-blockchain-api writer pod(s)
+{{- end }}
+
+{{- if .Values.apiReader.enabled }}
+The stacks-blockchain-api reader node(s) can be accessed via port {{ include "stacksBlockchainApi.apiReader.service.ports.api" . }} on the following DNS names from within your cluster:
+
+    {{ template "common.names.fullname" . }}-reader.{{ .Release.Namespace }}.svc.cluster.local - connection to stacks-blockchain-api reader pod(s)
+{{- end }}
 
 {{- end }}
 

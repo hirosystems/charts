@@ -371,6 +371,12 @@ initContainers: []
 
 ## @section Traffic Exposure Parameters
 
+## @param uniqueServices Create one service connecting to each stacks-blockchain pod
+##
+singleService: false
+## @param uniqueServices Create a unique service for each stacks-blockchain pod
+##
+uniqueServices: true
 ## stacks-blockchain service parameters
 ##
 service:
@@ -720,3 +726,40 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+
+## Bitcoin Core Subchart
+##
+bitcoin-core:
+  enabled: true
+
+  config: |
+    server=1
+    txindex=1
+
+    chain=main
+    # chain=test
+    # chain=regtest
+    # chain=signet
+
+    rpcserialversion=0
+    rpcuser=hirosystems
+    rpcpassword=hirosystems
+
+    rpcallowip=192.168.0.0/20
+    rpcallowip=10.0.0.0/16
+    whitelist=192.168.0.0/20
+    whitelist=10.0.0.0/16
+    rpcbind=0.0.0.0
+
+    dbcache=75
+    maxorphantx=10
+    maxmempool=150
+    nodebuglogfile=1
+  containerPorts:
+    rpc: 8332
+    p2p: 8333
+  service:
+    type: ClusterIP
+    ports:
+      rpc: 8332
+      p2p: 8333

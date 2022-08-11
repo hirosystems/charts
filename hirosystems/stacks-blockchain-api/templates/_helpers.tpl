@@ -20,6 +20,20 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+The API service port for the Stacks Blockchain API writer
+*/}}
+{{- define "stacksBlockchainApi.apiWriter.service.ports.api" -}}
+{{ default "20443" .Values.apiWriter.service.ports.api }}
+{{- end -}}
+
+{{/*
+The API service port for the Stacks Blockchain API reader
+*/}}
+{{- define "stacksBlockchainApi.apiReader.service.ports.api" -}}
+{{ default "20443" .Values.apiReader.service.ports.api }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "stacksBlockchainApi.serviceAccountName" -}}
