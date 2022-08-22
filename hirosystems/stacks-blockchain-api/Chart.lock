@@ -1,12 +1,12 @@
 dependencies:
 - name: stacks-blockchain
   repository: https://charts.hiro.so/hirosystems
-  version: 0.1.2
+  version: 0.1.3
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 11.6.26
+  version: 11.8.0
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.16.1
-digest: sha256:8f651cd67fef708be12ede534d7fd41773f59da33dd889e01ef64013cce503cc
-generated: "2022-08-10T22:54:45.583732-04:00"
+  version: 1.17.1
+digest: sha256:29c202541530b0950dea45eef0a90583e84fd8a3f7ae99254e4db72243d66128
+generated: "2022-08-22T11:41:04.310897-04:00"
