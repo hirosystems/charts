@@ -389,21 +389,78 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.apiWriter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: bns-data
-        {{- if .Values.apiWriter.persistence.bns.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ default (include "common.names.fullname" .) .Values.apiWriter.persistence.bns.existingClaim }}-bns
-        {{- else }}
-          emptyDir: {}
-        {{- end }}
-        - name: data
-        {{- if .Values.apiWriter.persistence.data.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ default (include "common.names.fullname" .) .Values.apiWriter.persistence.data.existingClaim }}-data
-        {{- else }}
-          emptyDir: {}
-        {{- end }}
         {{- if .Values.apiWriter.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+        {{- if and .Values.apiWriter.persistence.data.enabled .Values.apiWriter.persistence.data.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.apiWriter.persistence.data.existingClaim . }}
+        {{- else if not .Values.apiWriter.persistence.data.enabled }}
+          emptyDir: {}
+        {{- end }}
+        {{- if and .Values.apiWriter.persistence.bns.enabled .Values.apiWriter.persistence.bns.existingClaim }}
+        - name: bns-data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.apiWriter.persistence.bns.existingClaim . }}
+        {{- else if not .Values.apiWriter.persistence.bns.enabled }}
+          emptyDir: {}
+        {{- end }}
+  {{- if or (and .Values.apiWriter.persistence.data.enabled (not .Values.apiWriter.persistence.data.existingClaim)) (and .Values.apiWriter.persistence.bns.enabled (not .Values.apiWriter.persistence.bns.existingClaim)) }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+          {{- if .Values.apiWriter.persistence.data.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.apiWriter.persistence.data.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.apiWriter.persistence.data.size | quote }}
+        {{- if .Values.apiWriter.persistence.data.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.apiWriter.persistence.data.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.dataSource "context" $) | nindent 4 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.data "global" .Values.global) | nindent 8 }}
+    - metadata:
+        name: bns-data
+        annotations:
+          {{- if .Values.apiWriter.persistence.bns.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.apiWriter.persistence.bns.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.apiWriter.persistence.bns.size | quote }}
+        {{- if .Values.apiWriter.persistence.bns.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.apiWriter.persistence.bns.bnsSource }}
+        bnsSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.bnsSource "context" $) | nindent 4 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.bns "global" .Values.global) | nindent 8 }}
+  {{- end }}
 {{- end }}

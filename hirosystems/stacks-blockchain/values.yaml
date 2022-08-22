@@ -552,7 +552,7 @@ persistence:
   enabled: true
   ## @param persistence.mountPath Path to mount the volume at.
   ##
-  mountPath: /app/data
+  mountPath: /hirosystems/data
   ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
   ##
   subPath: ""
@@ -730,7 +730,7 @@ metrics:
 ## Bitcoin Core Subchart
 ##
 bitcoin-core:
-  enabled: true
+  enabled: false
 
   config: |
     server=1
