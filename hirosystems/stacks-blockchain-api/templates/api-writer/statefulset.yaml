@@ -408,6 +408,7 @@ spec:
         {{- end }}
   {{- if or (and .Values.apiWriter.persistence.data.enabled (not .Values.apiWriter.persistence.data.existingClaim)) (and .Values.apiWriter.persistence.bns.enabled (not .Values.apiWriter.persistence.bns.existingClaim)) }}
   volumeClaimTemplates:
+    {{- if and .Values.apiWriter.persistence.data.enabled (not .Values.apiWriter.persistence.data.existingClaim) }}
     - metadata:
         name: data
         annotations:
@@ -435,6 +436,8 @@ spec:
         dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.dataSource "context" $) | nindent 4 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.data "global" .Values.global) | nindent 8 }}
+    {{- end }}
+    {{- if and .Values.apiWriter.persistence.bns.enabled (not .Values.apiWriter.persistence.bns.existingClaim) }}
     - metadata:
         name: bns-data
         annotations:
@@ -462,5 +465,6 @@ spec:
         bnsSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.bnsSource "context" $) | nindent 4 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.bns "global" .Values.global) | nindent 8 }}
+    {{- end }}
   {{- end }}
 {{- end }}
