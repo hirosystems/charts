@@ -392,15 +392,15 @@ spec:
         {{- if .Values.apiWriter.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if and .Values.apiWriter.persistence.data.enabled .Values.apiWriter.persistence.data.existingClaim }}
         - name: data
+        {{- if and .Values.apiWriter.persistence.data.enabled .Values.apiWriter.persistence.data.existingClaim }}
           persistentVolumeClaim:
             claimName: {{ tpl .Values.apiWriter.persistence.data.existingClaim . }}
         {{- else if not .Values.apiWriter.persistence.data.enabled }}
           emptyDir: {}
         {{- end }}
-        {{- if and .Values.apiWriter.persistence.bns.enabled .Values.apiWriter.persistence.bns.existingClaim }}
         - name: bns-data
+        {{- if and .Values.apiWriter.persistence.bns.enabled .Values.apiWriter.persistence.bns.existingClaim }}
           persistentVolumeClaim:
             claimName: {{ tpl .Values.apiWriter.persistence.bns.existingClaim . }}
         {{- else if not .Values.apiWriter.persistence.bns.enabled }}
