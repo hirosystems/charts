@@ -8,7 +8,7 @@ dependencies:
     repository: https://charts.hiro.so/hirosystems
     tags:
       - hirosystems-stacks-blockchain
-    version: 0.x.x
+    version: 1.x.x
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
@@ -41,4 +41,4 @@ sources:
   - https://github.com/hirosystems/stacks-blockchain-api
   - https://docs.hiro.so/api
   - https://docs.hiro.so/get-started/stacks-blockchain-api
-version: 1.0.1
+version: 1.0.2
