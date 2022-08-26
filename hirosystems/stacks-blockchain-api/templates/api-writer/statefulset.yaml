@@ -219,6 +219,8 @@ spec:
                 secretKeyRef:
                   key: {{ include "postgresql.adminPasswordKey" .Subcharts.postgresql | quote }}
                   name: {{ include "postgresql.secretName" .Subcharts.postgresql | quote }}
+            - name: PG_IDENT_INDEX_TYPE
+              value: {{ default "hash" .Values.apiWriter.config.pgIdentIndexType }}
           command:
             - sh
             - -c
@@ -303,6 +305,8 @@ spec:
                   fieldPath: metadata.name
             - name: PG_CONNECTION_POOL_MAX
               value: {{ default "50" .Values.apiWriter.config.pgConnectionPoolMax | quote }}
+            - name: PG_IDENT_INDEX_TYPE
+              value: {{ default "hash" .Values.apiWriter.config.pgIdentIndexType }}
             {{- if .Values.cdn.enabled }}
             - name: IMGIX_TOKEN
               valueFrom:

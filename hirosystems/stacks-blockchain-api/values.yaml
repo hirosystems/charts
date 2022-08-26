@@ -79,6 +79,7 @@ apiWriter:
     bindAddress: "0.0.0.0"
     enableTokenMetadataStrictMode: true
     pgConnectionPoolMax: "50"
+    pgIdentIndexType: "hash"
     stacksAddressCacheSize: "50000"
   ## Hiro Systems Stacks Blockchain API Writer image
   ## ref: https://hub.docker.com/r/hirosystems/stacks-blockchain-api/tags/
