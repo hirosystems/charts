@@ -71,7 +71,9 @@ apiWriter:
     ## @param dataArchiveUrl Specify a URL from which to download a tar.gz archive of the stacks-blockchain-api TSV file before launching the server
     ##
     dataArchiveUrl: ""
-    # dataArchiveUrl: https://storage.googleapis.com/blockstack-publish/archiver-main/follower/mainnet-follower-latest.tar.gz
+    # dataArchiveUrl: https://storage.googleapis.com/blockstack-publish/mainnet/api/mainnet-blockchain-api-4.0.3-latest.tar.gz
+    # Replay events from the API's TSV file into the Postgres database
+    # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
     replayEvents: false
     exportEvents: false
     enableFtMetadata: true
