@@ -223,7 +223,7 @@ spec:
             - sh
             - -c
             - |
-              node /lib/index.js import-events --file ${STACKS_EXPORT_EVENTS_FILE} --wipe-db --force
+              node ./lib/index.js import-events --file ${STACKS_EXPORT_EVENTS_FILE} --wipe-db --force --mode pruned
           {{- if .Values.apiWriter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
