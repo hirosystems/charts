@@ -17,7 +17,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ include "common.names.fullname" . }}
+    name: {{ include "common.names.fullname" . }}-reader
   minReplicas: {{ .Values.apiReader.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.apiReader.autoscaling.maxReplicas }}
   metrics:
