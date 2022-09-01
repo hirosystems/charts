@@ -129,6 +129,45 @@ entries:
   - annotations:
       category: Blockchain
     apiVersion: v2
+    appVersion: 2.05.0.3.0
+    created: "2022-09-01T21:59:41.74554781Z"
+    dependencies:
+    - condition: bitcoin-core.enabled
+      name: bitcoin-core
+      repository: https://charts.hiro.so/hirosystems
+      tags:
+      - hirosystems-bitcoin-core
+      version: 1.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Stacks Blockchain Node
+    digest: 06599e853dcf8c8d8ff5cc8ad07d78d498fb09c8e8965bdf724b704acad2b363
+    home: https://github.com/stacks-network/stacks-blockchain
+    icon: https://docs.hiro.so/img/footer-logo-light.svg
+    keywords:
+    - stacks
+    - stx
+    - blockchain
+    - hiro
+    - bitcoin
+    - bitcoind
+    - btc
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: stacks-blockchain
+    sources:
+    - https://github.com/stacks-network/stacks-blockchain
+    - https://docs.stacks.co/
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-1.0.3/stacks-blockchain-1.0.3.tgz
+    version: 1.0.3
+  - annotations:
+      category: Blockchain
+    apiVersion: v2
     appVersion: 2.05.0.2.2
     created: "2022-08-26T18:11:06.360697236Z"
     dependencies:
@@ -805,4 +844,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-29T21:45:20.399037805Z"
+generated: "2022-09-01T21:59:41.745692911Z"
