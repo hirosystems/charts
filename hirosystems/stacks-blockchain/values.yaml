@@ -213,6 +213,19 @@ containerSecurityContext:
   runAsNonRoot: true
   readOnlyRootFilesystem: false
 
+## Configure Init Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param stacksBlockchain.initContainerSecurityContext.enabled Enabled stacks-blockchain init containers' Security Context
+## @param stacksBlockchain.initContainerSecurityContext.runAsUser Set stacks-blockchain init containers' Security Context runAsUser
+## @param stacksBlockchain.initContainerSecurityContext.runAsNonRoot Set stacks-blockchain init containers' Security Context runAsNonRoot
+## @param stacksBlockchain.initContainerSecurityContext.readOnlyRootFilesystem Set stacks-blockchain init containers' Security Context runAsNonRoot
+##
+initContainerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+  readOnlyRootFilesystem: false
+
 ## @param stacksBlockchain.existingConfigmap The name of an existing ConfigMap with your custom configuration for stacks-blockchain
 ##
 existingConfigmap:
