@@ -228,6 +228,19 @@ containerSecurityContext:
   runAsNonRoot: true
   readOnlyRootFilesystem: false
 
+## Configure Init Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param initContainerSecurityContext.enabled Enabled bitcoin-core init containers' Security Context
+## @param initContainerSecurityContext.runAsUser Set bitcoin-core init containers' Security Context runAsUser
+## @param initContainerSecurityContext.runAsNonRoot Set bitcoin-core init containers' Security Context runAsNonRoot
+## @param initContainerSecurityContext.readOnlyRootFilesystem Set bitcoin-core init containers' Security Context runAsNonRoot
+##
+initContainerSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsNonRoot: true
+  readOnlyRootFilesystem: false
+
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for bitcoin-core
 ##
 existingConfigmap:
