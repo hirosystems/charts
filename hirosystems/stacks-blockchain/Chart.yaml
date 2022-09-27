@@ -17,7 +17,7 @@ dependencies:
 description: Stacks Blockchain Node
 engine: gotpl
 home: https://github.com/stacks-network/stacks-blockchain
-icon: https://docs.hiro.so/img/footer-logo-light.svg
+icon: https://docs.stacks.co/img/stacks_with_interior_white_exterior_transparent.png
 keywords:
   - stacks
   - stx
@@ -33,4 +33,4 @@ name: stacks-blockchain
 sources:
   - https://github.com/stacks-network/stacks-blockchain
   - https://docs.stacks.co/
-version: 1.1.0
+version: 1.1.1

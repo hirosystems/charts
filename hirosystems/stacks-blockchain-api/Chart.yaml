@@ -23,7 +23,7 @@ dependencies:
 description: API for the Stacks 2.0 blockchain
 engine: gotpl
 home: https://github.com/hirosystems/stacks-blockchain-api
-icon: https://docs.hiro.so/img/footer-logo-light.svg
+icon: https://docs.hiro.so/img/hiro-docs-footer.svg
 keywords:
   - stacks
   - stx
@@ -41,4 +41,4 @@ sources:
   - https://github.com/hirosystems/stacks-blockchain-api
   - https://docs.hiro.so/api
   - https://docs.hiro.so/get-started/stacks-blockchain-api
-version: 1.1.0
+version: 1.1.1
