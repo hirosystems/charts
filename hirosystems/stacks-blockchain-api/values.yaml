@@ -204,6 +204,19 @@ apiWriter:
     runAsNonRoot: true
     readOnlyRootFilesystem: false
 
+  ## Configure Init Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param apiWriter.initContainerSecurityContext.enabled Enabled Stacks Blockchain API Writer init containers' Security Context
+  ## @param apiWriter.initContainerSecurityContext.runAsUser Set Stacks Blockchain API Writer init containers' Security Context runAsUser
+  ## @param apiWriter.initContainerSecurityContext.runAsNonRoot Set Stacks Blockchain API Writer init containers' Security Context runAsNonRoot
+  ## @param apiWriter.initContainerSecurityContext.readOnlyRootFilesystem Set Stacks Blockchain API Writer init containers' Security Context runAsNonRoot
+  ##
+  initContainerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
   service:
     ## @param service.type Stacks Blockchain API Writer service type
     ##

@@ -94,6 +94,12 @@ spec:
               else
                 echo "Previous data found. Exiting."
               fi
+          {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.apiWriter.resources }}
+          resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
+          {{- end }}
         {{- if .Values.apiWriter.config.exportEvents }}
         - name: export-events
           image: {{ template "stacksBlockchainApi.image" . }}
@@ -125,8 +131,8 @@ spec:
             - -c
             - |
               node ./lib/index.js export-events --file ${STACKS_EXPORT_EVENTS_FILE}
-          {{- if .Values.apiWriter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.apiWriter.resources }}
           resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
@@ -159,8 +165,8 @@ spec:
               else
                 echo "Previous data found. Exiting."
               fi
-          {{- if .Values.apiWriter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.apiWriter.resources }}
           resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
@@ -180,10 +186,10 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.data.mountPath }}
-              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
-          {{- if .Values.apiWriter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+              chown -R {{ .Values.apiWriter.initContainerSecurityContext.runAsUser }}:{{ .Values.apiWriter.initContainerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.data.mountPath }}
+              chown -R {{ .Values.apiWriter.initContainerSecurityContext.runAsUser }}:{{ .Values.apiWriter.initContainerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
+          {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.apiWriter.volumePermissions.resources }}
           resources: {{- toYaml .Values.apiWriter.volumePermissions.resources | nindent 12 }}
@@ -224,8 +230,8 @@ spec:
             - -c
             - |
               node ./lib/index.js import-events --file ${STACKS_EXPORT_EVENTS_FILE} --wipe-db --force --mode pruned
-          {{- if .Values.apiWriter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.apiWriter.resources }}
           resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
