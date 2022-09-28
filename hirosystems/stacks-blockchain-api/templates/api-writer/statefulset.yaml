@@ -186,10 +186,10 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.apiWriter.initContainerSecurityContext.runAsUser }}:{{ .Values.apiWriter.initContainerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.data.mountPath }}
-              chown -R {{ .Values.apiWriter.initContainerSecurityContext.runAsUser }}:{{ .Values.apiWriter.initContainerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
-          {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
+              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.data.mountPath }}
+              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
+          {{- if .Values.apiWriter.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apiWriter.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.apiWriter.volumePermissions.resources }}
           resources: {{- toYaml .Values.apiWriter.volumePermissions.resources | nindent 12 }}
