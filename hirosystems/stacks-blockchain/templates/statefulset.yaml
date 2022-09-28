@@ -109,9 +109,9 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.initContainerSecurityContext.runAsUser }}:{{ .Values.initContainerSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
-          {{- if .Values.initContainerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.containerSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
