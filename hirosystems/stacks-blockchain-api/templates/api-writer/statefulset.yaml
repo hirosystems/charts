@@ -163,8 +163,8 @@ spec:
                 tar zxvf ${DATA_DIR}/archive.tar.gz -C ${DATA_DIR}
                 rm -f ${DATA_DIR}/archive.tar.gz
                 echo "Setting permissions"
-                chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} ${DATA_DIR}
-                chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
+                chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.podSecurityContext.fsGroup }} ${DATA_DIR}
+                chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.podSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
               else
                 echo "Previous data found. Exiting."
               fi
@@ -191,8 +191,8 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.data.mountPath }}
-              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.containerSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
+              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.podSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.data.mountPath }}
+              chown -R {{ .Values.apiWriter.containerSecurityContext.runAsUser }}:{{ .Values.apiWriter.podSecurityContext.fsGroup }} {{ .Values.apiWriter.persistence.bns.mountPath }}
           {{- if .Values.apiWriter.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
