@@ -85,6 +85,8 @@ spec:
                 wget ${ARCHIVE_URL} -O ${DATA_DIR}/archive.tar.gz
                 tar zxvf ${DATA_DIR}/archive.tar.gz -C ${DATA_DIR}
                 rm -f ${DATA_DIR}/archive.tar.gz
+                echo "Setting permissions"
+                chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.containerSecurityContext.fsGroup }} ${DATA_DIR}
               else
                 echo "Previous data found. Exiting."
               fi
