@@ -85,8 +85,6 @@ spec:
                 wget ${ARCHIVE_URL} -O ${DATA_DIR}/archive.tar.gz
                 tar zxvf ${DATA_DIR}/archive.tar.gz -C ${DATA_DIR}
                 rm -f ${DATA_DIR}/archive.tar.gz
-                echo "Setting permissions"
-                chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} ${DATA_DIR}
               else
                 echo "Previous data found. Exiting."
               fi
@@ -111,7 +109,9 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              if [[ "$(stat {{ .Values.persistence.mountPath }} -c %u:%g)" != "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" ]]; then
+                chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              fi
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
