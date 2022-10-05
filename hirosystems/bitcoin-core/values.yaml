@@ -675,6 +675,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    enabled: true
     runAsUser: 0
 
 ## @section Other Parameters
