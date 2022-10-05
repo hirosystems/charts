@@ -491,8 +491,8 @@ spec:
         {{- if .Values.apiWriter.persistence.bns.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.selector "context" $) | nindent 10 }}
         {{- end }}
-        {{- if .Values.apiWriter.persistence.bns.bnsSource }}
-        bnsSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.bnsSource "context" $) | nindent 4 }}
+        {{- if .Values.apiWriter.persistence.bns.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.dataSource "context" $) | nindent 4 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.bns "global" .Values.global) | nindent 8 }}
     {{- end }}

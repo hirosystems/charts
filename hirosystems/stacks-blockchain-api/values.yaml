@@ -1087,20 +1087,20 @@ postgresql:
   auth:
     database: stacks_blockchain_api
   primary:
-    initdb:
-      scripts:
-        create_schema.sql: |
-          revoke all on database stacks_blockchain_api from public;
-          grant all privileges on database stacks_blockchain_api to postgres;
-          \c stacks_blockchain_api;
-          drop schema if exists stacks_blockchain_api cascade;
-          alter database stacks_blockchain_api set default_transaction_read_only = off;
-          alter database stacks_blockchain_api owner to postgres;
-          create schema if not exists stacks_blockchain_api authorization postgres;
-          alter database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
-          alter user postgres in database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
-          revoke all on schema public from public;
-          revoke all on schema stacks_blockchain_api from public;
-          grant all on schema stacks_blockchain_api to postgres;
+    # initdb:
+    #   scripts:
+    #     create_schema.sql: |
+    #       revoke all on database stacks_blockchain_api from public;
+    #       grant all privileges on database stacks_blockchain_api to postgres;
+    #       \c stacks_blockchain_api;
+    #       drop schema if exists stacks_blockchain_api cascade;
+    #       alter database stacks_blockchain_api set default_transaction_read_only = off;
+    #       alter database stacks_blockchain_api owner to postgres;
+    #       create schema if not exists stacks_blockchain_api authorization postgres;
+    #       alter database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
+    #       alter user postgres in database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
+    #       revoke all on schema public from public;
+    #       revoke all on schema stacks_blockchain_api from public;
+    #       grant all on schema stacks_blockchain_api to postgres;
     persistence:
       size: 50Gi
