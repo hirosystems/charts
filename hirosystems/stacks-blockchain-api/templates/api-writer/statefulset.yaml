@@ -130,7 +130,7 @@ spec:
             - sh
             - -c
             - |
-              node ./lib/index.js export-events --file ${STACKS_EXPORT_EVENTS_FILE}
+              node ./lib/index.js export-events --file ${STACKS_EXPORT_EVENTS_FILE} --overwrite-file
           {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -274,8 +274,10 @@ spec:
           securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
+            {{- if semverCompare "< 6.0.0" .Values.apiWriter.image.tag }}
             - name: STACKS_EXPORT_EVENTS_FILE
               value: {{ .Values.apiWriter.persistence.data.mountPath }}/stacks-node-events.tsv
+            {{- end }}
             - name: STACKS_API_LOG_LEVEL
               value: {{ ternary "debug" "info" (or .Values.apiWriter.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: STACKS_CHAIN_ID
