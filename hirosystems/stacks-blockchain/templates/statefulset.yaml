@@ -231,7 +231,11 @@ spec:
             secretName: {{ .Values.existingSecretForConfig }}
           {{- else }}
           configMap:
+            {{- if .Values.existingConfigMap }}
+            name: {{ .Values.existingConfigMap }}
+            {{- else }}
             name: {{ template "common.names.fullname" . }}
+            {{- end }}
           {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
