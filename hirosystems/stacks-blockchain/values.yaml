@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: blockstack/stacks-blockchain
-  tag: 2.05.0.5.0
+  tag: 2.05.0.5.1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -106,7 +106,7 @@ existingConfigMap: ""
 ## @param dataArchiveUrl Specify a URL from which to download a tar.gz archive of the stacks chainstate before launching a stacks node
 ##
 dataArchiveUrl: ""
-# dataArchiveUrl: https://storage.googleapis.com/hirosystems-archive/mainnet/blockchain/mainnet-blockchain-2.05.0.5.0-latest.tar.gz
+# dataArchiveUrl: https://storage.googleapis.com/hirosystems-archive/mainnet/blockchain/mainnet-blockchain-2.05.0.5.1-latest.tar.gz
 ## @param stacksBlockchain.config stacks-blockchain config.toml settings
 ##
 config: |
