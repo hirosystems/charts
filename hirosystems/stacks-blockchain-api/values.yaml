@@ -1055,6 +1055,25 @@ rbac:
   ##
   rules: []
 
+## RBAC configuration
+##
+clusterRbac:
+  ## @param clusterRbac.create Specifies whether RBAC resources should be created at the cluster scope
+  ##
+  create: true
+  ## @param clusterRbac.rules Custom RBAC rules to set at the cluster scope
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
 ## ServiceAccount configuration
 ##
 serviceAccount:
