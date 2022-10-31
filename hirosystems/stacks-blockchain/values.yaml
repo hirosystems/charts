@@ -90,7 +90,7 @@ image:
   pullSecrets: []
   ## Enable debug mode
   ##
-  debug: true
+  debug: false
   ## Enable JSON logs
   ##
   jsonLogs: true
@@ -193,6 +193,11 @@ customStartupProbe: {}
 ## @param stacksBlockchain.resources.requests The requested resources for the stacks-blockchain containers
 ##
 resources:
+  # requests:
+  #   memory: "3Gi"
+  #   cpu: "1"
+  # limits:
+  #   memory: "3Gi"
   limits: {}
   requests: {}
 ## Configure Pods Security Context
@@ -226,6 +231,9 @@ containerSecurityContext:
 initContainerSecurityContext:
   enabled: true
   runAsUser: 1001
+  # If running with Istio sidecar, setting this to 1337 will
+  # allow the initContainer to download the dataArchiveUrl if set
+  # runAsUser: 1337
   runAsNonRoot: true
   readOnlyRootFilesystem: false
 
