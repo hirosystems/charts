@@ -181,6 +181,11 @@ apiWriter:
   ## @param apiWriter.resources.requests The requested resources for the Stacks Blockchain API Writer containers
   ##
   resources:
+    # limits:
+    #   memory: 1.5Gi
+    # requests:
+    #   cpu: 100m
+    #   memory: 1.5Gi
     limits: {}
     requests: {}
   ## Configure Pods Security Context
@@ -214,6 +219,9 @@ apiWriter:
   initContainerSecurityContext:
     enabled: true
     runAsUser: 1001
+    # If running with Istio sidecar, setting this to 1337 will
+    # allow the initContainer to download the dataArchiveUrl if set
+    # runAsUser: 1337
     runAsNonRoot: true
     readOnlyRootFilesystem: false
 
@@ -332,6 +340,87 @@ apiWriter:
     ##   - e2e-az2
     ##
     values: []
+
+    ## @param apiWriter.affinity Affinity for Stacks Blockchain API Writer pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## NOTE: `apiWriter.podAffinityPreset`, `apiWriter.podAntiAffinityPreset`, and `apiWriter.nodeAffinityPreset` will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param apiWriter.nodeSelector Node labels for Stacks Blockchain API Writer pods assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param apiWriter.tolerations Tolerations for Stacks Blockchain API Writer pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param apiWriter.updateStrategy.type Stacks Blockchain API Writer statefulset strategy type
+    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+    ##
+    updateStrategy:
+      ## StrategyType
+      ## Can be set to RollingUpdate or OnDelete
+      ##
+      type: RollingUpdate
+
+    ## @param apiWriter.priorityClassName Stacks Blockchain API Writer pods' priorityClassName
+    ##
+    priorityClassName: ""
+    ## @param apiWriter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+    ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+    ##
+    topologySpreadConstraints: []
+    ## @param apiWriter.schedulerName Name of the k8s scheduler (other than default) for Stacks Blockchain API Writer pods
+    ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+    ##
+    schedulerName: ""
+    ## @param apiWriter.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+    ##
+    terminationGracePeriodSeconds: ""
+    ## @param apiWriter.lifecycleHooks for the Stacks Blockchain API Writer container(s) to automate configuration before or after startup
+    ##
+    lifecycleHooks: {}
+    ## @param apiWriter.extraEnvVars Array with extra environment variables to add to Stacks Blockchain API Writer nodes
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param apiWriter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Stacks Blockchain API Writer nodes
+    ##
+    extraEnvVarsCM: ""
+    ## @param apiWriter.extraEnvVarsSecret Name of existing Secret containing extra env vars for Stacks Blockchain API Writer nodes
+    ##
+    extraEnvVarsSecret: ""
+    ## @param apiWriter.extraVolumes Optionally specify extra list of additional volumes for the Stacks Blockchain API Writer pod(s)
+    ##
+    extraVolumes: []
+    ## @param apiWriter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Stacks Blockchain API Writer container(s)
+    ##
+    extraVolumeMounts: []
+    ## @param apiWriter.sidecars Add additional sidecar containers to the Stacks Blockchain API Writer pod(s)
+    ## e.g:
+    ## sidecars:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    sidecars: []
+    ## @param apiWriter.initContainers Add additional init containers to the Stacks Blockchain API Writer pod(s)
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+    ## e.g:
+    ## initContainers:
+    ##  - name: your-image-name
+    ##    image: your-image
+    ##    imagePullPolicy: Always
+    ##    command: ['sh', '-c', 'echo "hello world"']
+    ##
+    initContainers: []
 
   ## @section Persistence Parameters
 
@@ -498,7 +587,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 4.0.3
+    tag: 6.1.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -585,6 +674,11 @@ apiReader:
   ## @param apiReader.resources.requests The requested resources for the stacks-blockchain-api containers
   ##
   resources:
+    # limits:
+    #   memory: 256Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 256Mi
     limits: {}
     requests: {}
   ## Configure Pods Security Context
@@ -841,7 +935,7 @@ cdn:
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Stacks Blockchain API
   ##
-  enabled: true
+  enabled: false
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -1078,29 +1172,38 @@ postgresql:
           targetPort: tcp-postgresql
         selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
         type: ClusterIP
-
-  ## Authentication parameters
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-on-first-run
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run
-  ##
   auth:
     database: stacks_blockchain_api
   primary:
     # initdb:
     #   scripts:
-    #     create_schema.sql: |
-    #       revoke all on database stacks_blockchain_api from public;
-    #       grant all privileges on database stacks_blockchain_api to postgres;
+    #     0_restore_archive.sh: |
+    #       #!/bin/sh
+    #       install_packages curl
+    #       curl https://storage.googleapis.com/hirosystems-archive/mainnet/postgres/mainnet-postgres-14-latest.tar.gz -o /opt/stacks-blockchain-api-postgres.tar.gz
+    #       PGPASSWORD=${POSTGRES_PASSWORD}
+    #       pg_restore --username postgres --verbose --jobs 4 --dbname stacks_blockchain_api /opt/stacks-blockchain-api-postgres.tar.gz
+    #       rm -f /opt/stacks-blockchain-api-postgres.tar.gz
+    #     1_configure_schema.sql: |
+    #       REVOKE ALL ON DATABASE stacks_blockchain_api FROM public;
+    #       GRANT ALL PRIVILEGES ON DATABASE stacks_blockchain_api TO postgres;
     #       \c stacks_blockchain_api;
-    #       drop schema if exists stacks_blockchain_api cascade;
-    #       alter database stacks_blockchain_api set default_transaction_read_only = off;
-    #       alter database stacks_blockchain_api owner to postgres;
-    #       create schema if not exists stacks_blockchain_api authorization postgres;
-    #       alter database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
-    #       alter user postgres in database stacks_blockchain_api set search_path TO stacks_blockchain_api,public;
-    #       revoke all on schema public from public;
-    #       revoke all on schema stacks_blockchain_api from public;
-    #       grant all on schema stacks_blockchain_api to postgres;
+    #       ALTER DATABASE stacks_blockchain_api SET default_transaction_read_only = off;
+    #       ALTER DATABASE stacks_blockchain_api OWNER TO postgres;
+    #       DO $$
+    #       BEGIN
+    #         IF EXISTS(select schema_name FROM information_schema.schemata WHERE schema_name = 'stacks_mainnet') THEN
+    #           EXECUTE 'ALTER SCHEMA stacks_mainnet RENAME TO stacks_blockchain_api';
+    #         ELSIF EXISTS(select schema_name FROM information_schema.schemata WHERE schema_name = 'stacks_testnet') THEN
+    #           EXECUTE 'ALTER SCHEMA stacks_testnet RENAME TO stacks_blockchain_api';
+    #         ELSE
+    #           CREATE SCHEMA IF NOT EXISTS stacks_blockchain_api AUTHORIZATION postgres;
+    #         END IF;
+    #       END $$;
+    #       ALTER DATABASE stacks_blockchain_api SET search_path TO stacks_blockchain_api,public;
+    #       ALTER USER postgres in database stacks_blockchain_api SET search_path TO stacks_blockchain_api,public;
+    #       REVOKE ALL ON SCHEMA public FROM public;
+    #       REVOKE ALL ON SCHEMA stacks_blockchain_api FROM public;
+    #       GRANT ALL ON SCHEMA stacks_blockchain_api TO postgres;
     persistence:
       size: 50Gi
