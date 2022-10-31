@@ -463,7 +463,7 @@ spec:
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.selector "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.apiWriter.persistence.data.dataSource }}
-        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.dataSource "context" $) | nindent 4 }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.data.dataSource "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.data "global" .Values.global) | nindent 8 }}
     {{- end }}
@@ -492,7 +492,7 @@ spec:
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.selector "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.apiWriter.persistence.bns.dataSource }}
-        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.dataSource "context" $) | nindent 4 }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.persistence.bns.dataSource "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.apiWriter.persistence.bns "global" .Values.global) | nindent 8 }}
     {{- end }}
