@@ -1,3 +1,4 @@
+{{ if .Values.rbac.create }}
 kind: RoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -19,3 +20,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "stacksBlockchainApi.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
+{{- end }}
