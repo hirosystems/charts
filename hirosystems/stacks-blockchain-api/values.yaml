@@ -74,7 +74,9 @@ apiWriter:
     # dataArchiveUrl: https://storage.googleapis.com/hirosystems-archive/mainnet/api/mainnet-blockchain-api-5.0.0-latest.tar.gz
     # Replay events from the API's TSV file into the Postgres database
     # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
-    replayEvents: false
+    replayEvents:
+      enabled: false
+      prunedMode: true
     exportEvents: false
     enableFtMetadata: true
     enableNftMetadata: false
@@ -94,7 +96,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 6.1.1
+    tag: 6.2.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -587,7 +589,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 6.1.1
+    tag: 6.2.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
