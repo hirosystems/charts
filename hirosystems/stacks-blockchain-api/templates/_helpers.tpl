@@ -58,7 +58,7 @@ Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 Return true if a secret object for the CDN should be created
 */}}
 {{- define "stacksBlockchainApi.cdn.createSecret" -}}
-{{- if not .Values.cdn.existingSecret -}}
+{{- if and (not .Values.cdn.existingSecret) (.Values.cdn.enabled) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
