@@ -1,5 +1,4 @@
-{{- $replicaCount := int .Values.apiReader.replicaCount }}
-{{- if and .Values.apiReader.pdb.create (gt $replicaCount 1) }}
+{{- if .Values.apiReader.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

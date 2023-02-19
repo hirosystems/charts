@@ -279,6 +279,16 @@ spec:
           {{- if .Values.apiWriter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.apiWriter.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.apiWriter.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: STACKS_API_LOG_LEVEL
               value: {{ ternary "debug" "info" (or .Values.apiWriter.image.debug .Values.diagnosticMode.enabled) | quote }}

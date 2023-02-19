@@ -1,6 +1,5 @@
 # NOTE: The API reader must always maintain 1 Pod
-{{- $replicaCount := int .Values.apiWriter.replicaCount }}
-{{- if and .Values.apiWriter.pdb.create (gt $replicaCount 1) }}
+{{- if .Values.apiWriter.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
