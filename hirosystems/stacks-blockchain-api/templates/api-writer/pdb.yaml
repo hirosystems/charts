@@ -1,4 +1,3 @@
-# NOTE: The API reader must always maintain 1 Pod
 {{- if .Values.apiWriter.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
