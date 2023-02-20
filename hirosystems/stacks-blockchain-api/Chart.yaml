@@ -14,13 +14,13 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-postgresql
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: API for the Stacks 2.0 blockchain
+description: API for the Stacks 2.1 blockchain
 engine: gotpl
 home: https://github.com/hirosystems/stacks-blockchain-api
 icon: https://docs.hiro.so/img/hiro-docs-footer.svg
@@ -41,4 +41,4 @@ sources:
   - https://github.com/hirosystems/stacks-blockchain-api
   - https://docs.hiro.so/api
   - https://docs.hiro.so/get-started/stacks-blockchain-api
-version: 2.0.8
+version: 3.0.0
