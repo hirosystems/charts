@@ -42,24 +42,24 @@ spec:
     - name: http-api
       port: {{ .Values.apiWriter.service.ports.api }}
       protocol: TCP
-      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.api)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.api }}
       {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: tcp-socket
       port: {{ .Values.apiWriter.service.ports.socket }}
       protocol: TCP
-      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.socket)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.socket }}
       {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: tcp-profiler
       port: {{ .Values.apiWriter.service.ports.profiler }}
       protocol: TCP
-      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.profiler)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.profiler }}
       {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
@@ -68,8 +68,8 @@ spec:
       port: {{ .Values.apiWriter.service.ports.metrics }}
       protocol: TCP
       {{- end }}
-      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiWriter.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiWriter.service.type "NodePort") (eq .Values.apiWriter.service.type "LoadBalancer")) (not (empty .Values.apiWriter.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.apiWriter.service.nodePorts.metrics }}
       {{- else if eq .Values.apiWriter.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}    {{- if .Values.apiWriter.service.extraPorts }}

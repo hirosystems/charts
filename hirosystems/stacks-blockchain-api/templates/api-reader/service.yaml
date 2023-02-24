@@ -42,24 +42,24 @@ spec:
     - name: http-api
       port: {{ .Values.apiReader.service.ports.api }}
       protocol: TCP
-      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.api)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.api }}
       {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: tcp-socket
       port: {{ .Values.apiReader.service.ports.socket }}
       protocol: TCP
-      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.socket)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.socket }}
       {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: tcp-profiler
       port: {{ .Values.apiReader.service.ports.profiler }}
       protocol: TCP
-      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.profiler)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.profiler }}
       {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
@@ -68,8 +68,8 @@ spec:
       port: {{ .Values.apiReader.service.ports.metrics }}
       protocol: TCP
       {{- end }}
-      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.http)) }}
-      nodePort: {{ .Values.apiReader.service.nodePorts.http }}
+      {{- if and (or (eq .Values.apiReader.service.type "NodePort") (eq .Values.apiReader.service.type "LoadBalancer")) (not (empty .Values.apiReader.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.apiReader.service.nodePorts.metrics }}
       {{- else if eq .Values.apiReader.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

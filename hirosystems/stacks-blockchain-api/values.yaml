@@ -96,7 +96,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.0.0
+    tag: 7.0.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -231,8 +231,10 @@ apiWriter:
     ## @param service.type Stacks Blockchain API Writer service type
     ##
     type: ClusterIP
-    ## @param service.ports.http Stacks Blockchain API Writer service HTTP port
-    ## @param service.ports.https Stacks Blockchain API Writer service HTTPS port
+    ## @param service.ports.api Stacks Blockchain API Writer service API port
+    ## @param service.ports.socket Stacks Blockchain API Writer service socket port
+    ## @param service.ports.profiler Stacks Blockchain API Writer service profiler port
+    ## @param service.ports.metrics Stacks Blockchain API Writer service metrics port
     ##
     ports:
       api: 3999
@@ -240,9 +242,10 @@ apiWriter:
       profiler: 9119
       metrics: 9153
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
-    ## NOTE: choose port between <30000-32767>
+    ## @param service.nodePorts.api Node port for API
+    ## @param service.nodePorts.socket Node port for socket
+    ## @param service.nodePorts.profiler Node port for profiler
+    ## @param service.nodePorts.metrics Node port for metrics
     ##
     nodePorts:
       api: ""
@@ -589,7 +592,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.0.0
+    tag: 7.0.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -860,8 +863,10 @@ apiReader:
     ## @param service.type Stacks Blockchain API Reader service type
     ##
     type: ClusterIP
-    ## @param service.ports.http Stacks Blockchain API Reader service HTTP port
-    ## @param service.ports.https Stacks Blockchain API Reader service HTTPS port
+    ## @param service.ports.api Stacks Blockchain API Writer service API port
+    ## @param service.ports.socket Stacks Blockchain API Writer service socket port
+    ## @param service.ports.profiler Stacks Blockchain API Writer service profiler port
+    ## @param service.ports.metrics Stacks Blockchain API Writer service metrics port
     ##
     ports:
       api: 3999
@@ -869,9 +874,10 @@ apiReader:
       profiler: 9119
       metrics: 9153
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
-    ## NOTE: choose port between <30000-32767>
+    ## @param service.nodePorts.api Node port for API
+    ## @param service.nodePorts.socket Node port for socket
+    ## @param service.nodePorts.profiler Node port for profiler
+    ## @param service.nodePorts.metrics Node port for metrics
     ##
     nodePorts:
       api: ""
