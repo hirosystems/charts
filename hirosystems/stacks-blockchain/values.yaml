@@ -407,17 +407,18 @@ service:
   ## @param service.type stacks-blockchain service type
   ##
   type: ClusterIP
-  ## @param service.ports.http stacks-blockchain service HTTP port
-  ## @param service.ports.https stacks-blockchain service HTTPS port
+  ## @param service.ports.rpc stacks-blockchain service RPC port
+  ## @param service.ports.p2p stacks-blockchain service P2P port
+  ## @param service.ports.metrics stacks-blockchain service metrics port
   ##
   ports:
     rpc: 20443
     p2p: 20444
     metrics: 9153
   ## Node ports to expose
-  ## @param service.nodePorts.http Node port for HTTP
-  ## @param service.nodePorts.https Node port for HTTPS
-  ## NOTE: choose port between <30000-32767>
+  ## @param service.nodePorts.rpc Node port for RPC
+  ## @param service.nodePorts.p2p Node port for P2P
+  ## @param service.nodePorts.metrics Node port for metrics
   ##
   nodePorts:
     rpc: ""
