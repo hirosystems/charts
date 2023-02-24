@@ -411,8 +411,8 @@ service:
   ## @param service.type bitcoin-core service type
   ##
   type: ClusterIP
-  ## @param service.ports.http bitcoin-core service HTTP port
-  ## @param service.ports.https bitcoin-core service HTTPS port
+  ## @param service.ports.rpc bitcoin-core service RPC port
+  ## @param service.ports.p2p bitcoin-core service P2P port
   ##
   ports:
     ## bitcoin network: mainnet
@@ -432,8 +432,8 @@ service:
     # rpc: 38332
     # p2p: 38333
   ## Node ports to expose
-  ## @param service.nodePorts.http Node port for HTTP
-  ## @param service.nodePorts.https Node port for HTTPS
+  ## @param service.nodePorts.rpc Node port for RPC
+  ## @param service.nodePorts.p2p Node port for P2P
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
