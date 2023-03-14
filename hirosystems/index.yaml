@@ -1499,6 +1499,53 @@ entries:
       category: ApplicationServer
     apiVersion: v2
     appVersion: 7.1.1
+    created: "2023-03-14T18:22:41.914276741Z"
+    dependencies:
+    - condition: stacks-blockchain.enabled
+      name: stacks-blockchain
+      repository: https://charts.hiro.so/hirosystems
+      tags:
+      - hirosystems-stacks-blockchain
+      version: 1.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-postgresql
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: API for the Stacks 2.1 blockchain
+    digest: 29858b3a2727b7524c40b8f328d64efebe04aab51ee28bfa9c6c4626f05ff01f
+    home: https://github.com/hirosystems/stacks-blockchain-api
+    icon: https://docs.hiro.so/img/hiro-docs-footer.svg
+    keywords:
+    - stacks
+    - stx
+    - blockchain
+    - hiro
+    - bitcoin
+    - bitcoind
+    - btc
+    - api
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: stacks-blockchain-api
+    sources:
+    - https://github.com/hirosystems/stacks-blockchain-api
+    - https://docs.hiro.so/api
+    - https://docs.hiro.so/get-started/stacks-blockchain-api
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-3.0.4/stacks-blockchain-api-3.0.4.tgz
+    version: 3.0.4
+  - annotations:
+      category: ApplicationServer
+    apiVersion: v2
+    appVersion: 7.1.1
     created: "2023-03-03T22:10:55.955523991Z"
     dependencies:
     - condition: stacks-blockchain.enabled
@@ -3375,4 +3422,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2023-03-03T22:10:55.956119102Z"
+generated: "2023-03-14T18:22:41.915076161Z"
