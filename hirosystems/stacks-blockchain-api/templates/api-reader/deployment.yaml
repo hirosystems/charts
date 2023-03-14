@@ -119,9 +119,9 @@ spec:
             - name: STACKS_CORE_RPC_PORT
               value: {{ include "stacksBlockchain.service.ports.rpc" (index .Subcharts "stacks-blockchain") | quote }}
             - name: STACKS_API_ENABLE_FT_METADATA
-              value: {{ default "0" .Values.apiReader.config.ftMetadata | quote }}
+              value: {{ ternary "1" "0" .Values.apiReader.config.enableFtMetadata | quote }}
             - name: STACKS_API_ENABLE_NFT_METADATA
-              value: {{ default "0" .Values.apiReader.config.nftMetadata | quote }}
+              value: {{ ternary "1" "0" .Values.apiReader.config.enableNftMetadata | quote }}
             - name: STACKS_ADDRESS_CACHE_SIZE
               value: {{ default "50000" .Values.apiReader.config.stacksAddressCacheSize | quote }}
             - name: PG_DATABASE

@@ -576,8 +576,8 @@ apiReader:
   enabled: true
   config:
     bindAddress: "0.0.0.0"
-    ftMetadata: true
-    nftMetadata: false
+    enableFtMetadata: true
+    enableNftMetadata: false
     pgConnectionPoolMax: "50"
     stacksAddressCacheSize: "50000"
   ## Hiro Systems stacks-blockchain-api image
