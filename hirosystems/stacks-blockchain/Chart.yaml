@@ -1,7 +1,7 @@
 annotations:
   category: Blockchain
 apiVersion: v2
-appVersion: 2.1.0.0.0
+appVersion: 2.1.0.0.1
 dependencies:
   - condition: bitcoin-core.enabled
     name: bitcoin-core
@@ -33,4 +33,4 @@ name: stacks-blockchain
 sources:
   - https://github.com/stacks-network/stacks-blockchain
   - https://docs.stacks.co/
-version: 1.2.4
+version: 1.2.5
