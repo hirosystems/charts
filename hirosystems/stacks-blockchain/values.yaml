@@ -134,6 +134,10 @@ containerPorts:
   rpc: 20443
   p2p: 20444
   metrics: 9153
+
+## @param service.extraPorts Extra ports to expose in stacks-blockchain container (normally used with the `sidecars` value)
+##
+extraPorts: []
 ## Configure extra options for stacks-blockchain containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param stacksBlockchain.livenessProbe.enabled Enable livenessProbe on stacks-blockchain containers
