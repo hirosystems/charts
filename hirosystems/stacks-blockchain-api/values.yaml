@@ -1207,26 +1207,16 @@ postgresql:
     #     0_restore_archive.sh: |
     #       #!/bin/sh
     #       install_packages curl
-    #       curl https://storage.googleapis.com/hirosystems-archive/mainnet/postgres/mainnet-postgres-14-latest.tar.gz -o /opt/stacks-blockchain-api-postgres.tar.gz
-    #       PGPASSWORD=${POSTGRES_PASSWORD}
-    #       pg_restore --username postgres --verbose --jobs 4 --dbname stacks_blockchain_api /opt/stacks-blockchain-api-postgres.tar.gz
-    #       rm -f /opt/stacks-blockchain-api-postgres.tar.gz
+    #       curl https://archive.dev.hiro.so/mainnet/stacks-blockchain-api-pg/stacks-blockchain-api-pg-15-latest.dump -o /opt/stacks-blockchain-api-postgres.dump
+    #       export PGPASSWORD=${POSTGRES_PASSWORD}
+    #       pg_restore --username postgres --verbose --jobs 4 --dbname stacks_blockchain_api /opt/stacks-blockchain-api-postgres.dump
+    #       rm -f /opt/stacks-blockchain-api-postgres.dump
     #     1_configure_schema.sql: |
     #       REVOKE ALL ON DATABASE stacks_blockchain_api FROM public;
     #       GRANT ALL PRIVILEGES ON DATABASE stacks_blockchain_api TO postgres;
     #       \c stacks_blockchain_api;
     #       ALTER DATABASE stacks_blockchain_api SET default_transaction_read_only = off;
     #       ALTER DATABASE stacks_blockchain_api OWNER TO postgres;
-    #       DO $$
-    #       BEGIN
-    #         IF EXISTS(select schema_name FROM information_schema.schemata WHERE schema_name = 'stacks_mainnet') THEN
-    #           EXECUTE 'ALTER SCHEMA stacks_mainnet RENAME TO stacks_blockchain_api';
-    #         ELSIF EXISTS(select schema_name FROM information_schema.schemata WHERE schema_name = 'stacks_testnet') THEN
-    #           EXECUTE 'ALTER SCHEMA stacks_testnet RENAME TO stacks_blockchain_api';
-    #         ELSE
-    #           CREATE SCHEMA IF NOT EXISTS stacks_blockchain_api AUTHORIZATION postgres;
-    #         END IF;
-    #       END $$;
     #       ALTER DATABASE stacks_blockchain_api SET search_path TO stacks_blockchain_api,public;
     #       ALTER USER postgres in database stacks_blockchain_api SET search_path TO stacks_blockchain_api,public;
     #       REVOKE ALL ON SCHEMA public FROM public;
