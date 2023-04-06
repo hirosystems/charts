@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 7.1.2
+appVersion: 7.1.4
 dependencies:
   - condition: stacks-blockchain.enabled
     name: stacks-blockchain
@@ -41,4 +41,4 @@ sources:
   - https://github.com/hirosystems/stacks-blockchain-api
   - https://docs.hiro.so/api
   - https://docs.hiro.so/get-started/stacks-blockchain-api
-version: 3.0.8
+version: 3.0.9
