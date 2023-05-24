@@ -7,7 +7,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Bitcoin Core Node
 engine: gotpl
 home: https://github.com/bitcoin/bitcoin
@@ -25,4 +25,4 @@ sources:
   - https://github.com/bitcoin/bitcoin
   - https://github.com/ruimarinho/docker-bitcoin-core
   - https://bitcoin.org
-version: 1.1.11
+version: 2.0.0
