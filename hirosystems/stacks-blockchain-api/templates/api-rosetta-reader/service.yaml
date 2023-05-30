@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}-rosetta-reader
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: rosetta-reader
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.apiRosettaReader.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.apiRosettaReader.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.apiRosettaReader.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.apiRosettaReader.service.type }}
+  {{- if and .Values.apiRosettaReader.service.clusterIP (eq .Values.apiRosettaReader.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.apiRosettaReader.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.apiRosettaReader.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.apiRosettaReader.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.apiRosettaReader.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.apiRosettaReader.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.apiRosettaReader.service.type "LoadBalancer") (eq .Values.apiRosettaReader.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.apiRosettaReader.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.apiRosettaReader.service.type "LoadBalancer") (not (empty .Values.apiRosettaReader.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.apiRosettaReader.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.apiRosettaReader.service.type "LoadBalancer") (not (empty .Values.apiRosettaReader.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.apiRosettaReader.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-api
+      port: {{ .Values.apiRosettaReader.service.ports.api }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiRosettaReader.service.type "NodePort") (eq .Values.apiRosettaReader.service.type "LoadBalancer")) (not (empty .Values.apiRosettaReader.service.nodePorts.api)) }}
+      nodePort: {{ .Values.apiRosettaReader.service.nodePorts.api }}
+      {{- else if eq .Values.apiRosettaReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-socket
+      port: {{ .Values.apiRosettaReader.service.ports.socket }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiRosettaReader.service.type "NodePort") (eq .Values.apiRosettaReader.service.type "LoadBalancer")) (not (empty .Values.apiRosettaReader.service.nodePorts.socket)) }}
+      nodePort: {{ .Values.apiRosettaReader.service.nodePorts.socket }}
+      {{- else if eq .Values.apiRosettaReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-profiler
+      port: {{ .Values.apiRosettaReader.service.ports.profiler }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiRosettaReader.service.type "NodePort") (eq .Values.apiRosettaReader.service.type "LoadBalancer")) (not (empty .Values.apiRosettaReader.service.nodePorts.profiler)) }}
+      nodePort: {{ .Values.apiRosettaReader.service.nodePorts.profiler }}
+      {{- else if eq .Values.apiRosettaReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.apiRosettaReader.service.ports.metrics }}
+      protocol: TCP
+      {{- end }}
+      {{- if and (or (eq .Values.apiRosettaReader.service.type "NodePort") (eq .Values.apiRosettaReader.service.type "LoadBalancer")) (not (empty .Values.apiRosettaReader.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.apiRosettaReader.service.nodePorts.metrics }}
+      {{- else if eq .Values.apiRosettaReader.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.apiRosettaReader.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiRosettaReader.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: stacks-blockchain-api
+    hiro.so/stacks-blockchain-api-role: rosetta-reader

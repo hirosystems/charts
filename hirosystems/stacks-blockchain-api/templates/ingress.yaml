@@ -39,6 +39,13 @@ spec:
             {{- else }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
             {{- end }}
+          {{- if .Values.apiRosettaReader.enabled }}
+          - path: {{ .Values.ingress.rosettaPath }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-reader-rosetta" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
+          {{- end }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
     - host: {{ .name | quote }}

@@ -16,7 +16,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "stacksBlockchainApi.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.apiWriter.image .Values.apiReader.image .Values.apiWriter.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.apiWriter.image .Values.apiReader.image .Values.apiRosettaReader.image .Values.apiWriter.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -31,6 +31,13 @@ The API service port for the Stacks Blockchain API reader
 */}}
 {{- define "stacksBlockchainApi.apiReader.service.ports.api" -}}
 {{ default "20443" .Values.apiReader.service.ports.api }}
+{{- end -}}
+
+{{/*
+The API service port for the Stacks Blockchain API Rosetta reader
+*/}}
+{{- define "stacksBlockchainApi.apiRosettaReader.service.ports.api" -}}
+{{ default "20443" .Values.apiRosettaReader.service.ports.api }}
 {{- end -}}
 
 {{/*

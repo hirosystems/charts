@@ -922,6 +922,364 @@ apiReader:
     ##
     sessionAffinityConfig: {}
 
+## Deploys a read-only Rosetta API node which only reads from the PG DB, and does not accept
+## events from a stacks-blockchain node. In a HA setup, the reader is typically exposed
+## to the internet and serves traffic, while the writer is not exposed.
+##
+## This reader gives the deployer the option of separating incoming Rosetta-bound traffic from the rest
+## of the traffic a reader may receive. This may be helpful for debugging purposes, or in a HA setup to ensure non-Rosetta pods
+## are not affected by the resource consumption and latency Rosetta endpoints may add.
+##
+apiRosettaReader:
+  enabled: false
+  config:
+    bindAddress: "0.0.0.0"
+    enableFtMetadata: true
+    enableNftMetadata: false
+    pgConnectionPoolMax: "50"
+    stacksAddressCacheSize: "50000"
+  ## Hiro Systems stacks-blockchain-api image
+  ## ref: https://hub.docker.com/r/hirosystems/stacks-blockchain-api/tags/
+  ## @param apiRosettaReader.image.registry stacks-blockchain-api image registry
+  ## @param apiRosettaReader.image.repository stacks-blockchain-api image repository
+  ## @param apiRosettaReader.image.tag stacks-blockchain-api image tag (immutable tags are recommended)
+  ## @param apiRosettaReader.image.pullPolicy stacks-blockchain-api image pull policy
+  ## @param apiRosettaReader.image.pullSecrets stacks-blockchain-api image pull secrets
+  ## @param apiRosettaReader.image.debug Enable stacks-blockchain-api image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: hirosystems/stacks-blockchain-api
+    tag: 7.2.1
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param apiRosettaReader.replicaCount Number of stacks-blockchain-api replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param apiRosettaReader.containerPorts.http stacks-blockchain-api HTTP container port
+  ## @param apiRosettaReader.containerPorts.https stacks-blockchain-api HTTPS container port
+  ##
+  containerPorts:
+    api: 3999
+    socket: 3700
+    profiler: 9119
+    metrics: 9153
+  ## Configure extra options for stacks-blockchain-api containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param apiRosettaReader.livenessProbe.enabled Enable livenessProbe on stacks-blockchain-api containers
+  ## @param apiRosettaReader.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param apiRosettaReader.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param apiRosettaReader.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param apiRosettaReader.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param apiRosettaReader.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param apiRosettaReader.readinessProbe.enabled Enable readinessProbe on stacks-blockchain-api containers
+  ## @param apiRosettaReader.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param apiRosettaReader.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param apiRosettaReader.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param apiRosettaReader.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param apiRosettaReader.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param apiRosettaReader.startupProbe.enabled Enable startupProbe on stacks-blockchain-api containers
+  ## @param apiRosettaReader.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param apiRosettaReader.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param apiRosettaReader.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param apiRosettaReader.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param apiRosettaReader.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param apiRosettaReader.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param apiRosettaReader.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param apiRosettaReader.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## stacks-blockchain-api resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param apiRosettaReader.resources.limits The resources limits for the stacks-blockchain-api containers
+  ## @param apiRosettaReader.resources.requests The requested resources for the stacks-blockchain-api containers
+  ##
+  resources:
+    # limits:
+    #   memory: 256Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 256Mi
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param apiRosettaReader.podSecurityContext.enabled Enabled stacks-blockchain-api pods' Security Context
+  ## @param apiRosettaReader.podSecurityContext.fsGroup Set stacks-blockchain-api pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param apiRosettaReader.containerSecurityContext.enabled Enabled stacks-blockchain-api containers' Security Context
+  ## @param apiRosettaReader.containerSecurityContext.runAsUser Set stacks-blockchain-api containers' Security Context runAsUser
+  ## @param apiRosettaReader.containerSecurityContext.runAsNonRoot Set stacks-blockchain-api containers' Security Context runAsNonRoot
+  ## @param apiRosettaReader.containerSecurityContext.readOnlyRootFilesystem Set stacks-blockchain-api containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+  ## @param apiRosettaReader.existingConfigmap The name of an existing ConfigMap with your custom configuration for Stacks Blockchain API Reader
+  ##
+  existingConfigmap:
+  ## @param apiRosettaReader.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param apiRosettaReader.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param apiRosettaReader.hostAliases Stacks Blockchain API Reader Rosetta pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param apiRosettaReader.podLabels Extra labels for Stacks Blockchain API Reader Rosetta pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+    # sidecar.istio.io/rewriteAppHTTPProbers: "false"
+  ## @param apiRosettaReader.podAnnotations Annotations for Stacks Blockchain API Reader Rosetta pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param apiRosettaReader.podAffinityPreset Pod affinity preset. Ignored if `apiRosettaReader.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param apiRosettaReader.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apiRosettaReader.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param apiRosettaReader.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param apiRosettaReader.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param apiRosettaReader.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param apiRosettaReader.autoscaling.enabled Enable autoscaling for apiRosettaReader
+  ## @param apiRosettaReader.autoscaling.minReplicas Minimum number of apiRosettaReader replicas
+  ## @param apiRosettaReader.autoscaling.maxReplicas Maximum number of apiRosettaReader replicas
+  ## @param apiRosettaReader.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param apiRosettaReader.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPU: 80
+    targetMemory: 80
+  ## Node apiRosettaReader.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param apiRosettaReader.nodeAffinityPreset.type Node affinity preset type. Ignored if `apiRosettaReader.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param apiRosettaReader.nodeAffinityPreset.key Node label key to match. Ignored if `apiRosettaReader.affinity` is set
+    ##
+    key: ""
+    ## @param apiRosettaReader.nodeAffinityPreset.values Node label values to match. Ignored if `apiRosettaReader.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param apiRosettaReader.affinity Affinity for Stacks Blockchain API Reader Rosetta pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `apiRosettaReader.podAffinityPreset`, `apiRosettaReader.podAntiAffinityPreset`, and `apiRosettaReader.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param apiRosettaReader.nodeSelector Node labels for Stacks Blockchain API Reader Rosetta pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param apiRosettaReader.tolerations Tolerations for Stacks Blockchain API Reader Rosetta pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param apiRosettaReader.updateStrategy.type Stacks Blockchain API Reader statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param apiRosettaReader.priorityClassName Stacks Blockchain API Reader Rosetta pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param apiRosettaReader.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param apiRosettaReader.schedulerName Name of the k8s scheduler (other than default) for Stacks Blockchain API Reader Rosetta pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param apiRosettaReader.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param apiRosettaReader.lifecycleHooks for the Stacks Blockchain API Reader container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param apiRosettaReader.extraEnvVars Array with extra environment variables to add to Stacks Blockchain API Reader nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param apiRosettaReader.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Stacks Blockchain API Reader nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param apiRosettaReader.extraEnvVarsSecret Name of existing Secret containing extra env vars for Stacks Blockchain API Reader nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param apiRosettaReader.extraVolumes Optionally specify extra list of additional volumes for the Stacks Blockchain API Reader pod(s)
+  ##
+  extraVolumes: []
+  ## @param apiRosettaReader.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Stacks Blockchain API Reader container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param apiRosettaReader.sidecars Add additional sidecar containers to the Stacks Blockchain API Reader pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param apiRosettaReader.initContainers Add additional init containers to the Stacks Blockchain API Reader pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  service:
+    ## @param service.type Stacks Blockchain API Reader service type
+    ##
+    type: ClusterIP
+    ## @param service.ports.api Stacks Blockchain API Writer service API port
+    ## @param service.ports.socket Stacks Blockchain API Writer service socket port
+    ## @param service.ports.profiler Stacks Blockchain API Writer service profiler port
+    ## @param service.ports.metrics Stacks Blockchain API Writer service metrics port
+    ##
+    ports:
+      api: 3999
+      socket: 3700
+      profiler: 9119
+      metrics: 9153
+    ## Node ports to expose
+    ## @param service.nodePorts.api Node port for API
+    ## @param service.nodePorts.socket Node port for socket
+    ## @param service.nodePorts.profiler Node port for profiler
+    ## @param service.nodePorts.metrics Node port for metrics
+    ##
+    nodePorts:
+      api: ""
+      socket: ""
+      profiler: ""
+      metrics: ""
+    ## @param service.clusterIP Stacks Blockchain API Reader service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param service.loadBalancerIP Stacks Blockchain API Reader service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param service.loadBalancerSourceRanges Stacks Blockchain API Reader service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param service.externalTrafficPolicy Stacks Blockchain API Reader service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param service.annotations Additional custom annotations for Stacks Blockchain API Reader service
+    ##
+    annotations: {}
+    ## @param service.extraPorts Extra ports to expose in Stacks Blockchain API Reader service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
 ## Configure a CDN to cache NFT images
 ##
 cdn:
@@ -962,6 +1320,10 @@ ingress:
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
   path: /
+  ## @param ingress.path Default Rosetta path for the ingress record. This is only used if apiRosettaReader.enable is true.
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  rosettaPath: /rosetta
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations

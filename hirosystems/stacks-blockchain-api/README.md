@@ -111,7 +111,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## License
 
-Copyright &copy; 2022 Hiro Systems
+Copyright &copy; 2023 Hiro Systems
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
