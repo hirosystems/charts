@@ -134,6 +134,10 @@ containerPorts:
   ##
   rpc: 8332
   p2p: 8333
+
+  ## @param service.extraPorts Extra ports to expose in stacks-blockchain container
+  ##
+  extraPorts: []
   ## bitcoin network: testnet
   ##
   # rpc: 18332
