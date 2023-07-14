@@ -134,10 +134,6 @@ containerPorts:
   ##
   rpc: 8332
   p2p: 8333
-
-  ## @param service.extraPorts Extra ports to expose in stacks-blockchain container
-  ##
-  extraPorts: []
   ## bitcoin network: testnet
   ##
   # rpc: 18332
@@ -150,6 +146,11 @@ containerPorts:
   ##
   # rpc: 38332
   # p2p: 38333
+
+## @param service.extraPorts Extra ports to expose in stacks-blockchain container
+##
+extraPorts: []
+
 ## Configure extra options for bitcoin-core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on bitcoin-core containers
