@@ -147,7 +147,7 @@ containerPorts:
   # rpc: 38332
   # p2p: 38333
 
-## @param service.extraPorts Extra ports to expose in stacks-blockchain container
+## @param service.extraPorts Extra ports to expose in bitcoin-core container
 ##
 extraPorts: []
 
