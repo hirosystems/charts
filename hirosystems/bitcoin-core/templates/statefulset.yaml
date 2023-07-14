@@ -171,6 +171,9 @@ spec:
               containerPort: {{ .Values.containerPorts.rpc }}
             - name: tcp-p2p
               containerPort: {{ .Values.containerPorts.p2p }}
+            {{- if .Values.extraPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
