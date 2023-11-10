@@ -76,7 +76,11 @@ apiWriter:
     # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
     replayEvents:
       enabled: false
-      prunedMode: true
+      image:
+        registry: docker.io
+        repository: hirosystems/stacks-event-replay
+        tag: 1.0.2
+      workers: 4
     exportEvents: false
     enableFtMetadata: true
     enableNftMetadata: false
