@@ -75,12 +75,22 @@ apiWriter:
     # Replay events from the API's TSV file into the Postgres database
     # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
     replayEvents:
-      enabled: false
+      enabled: true
       image:
         registry: docker.io
         repository: hirosystems/stacks-event-replay
         tag: 1.0.2
       workers: 4
+      maxOldSize: 8192
+      resources:
+        # limits:
+        #   memory: 1.5Gi
+        # requests:
+        #   cpu: 100m
+        #   memory: 1.5Gi
+        limits: {}
+        requests:
+          memory: 32Gi
     exportEvents: false
     enableFtMetadata: true
     enableNftMetadata: false

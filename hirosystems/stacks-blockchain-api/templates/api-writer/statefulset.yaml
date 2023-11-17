@@ -214,6 +214,8 @@ spec:
           image: {{ template "stacksBlockchainApi.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
           env:
+            - name: --max-old-space-size
+              value: {{ .Values.apiWriter.config.replayEvents.maxOldSize }}
             - name: STACKS_API_LOG_LEVEL
               value: {{ ternary "debug" "info" (or .Values.apiWriter.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: STACKS_CHAIN_ID
@@ -259,12 +261,18 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          command: node ./lib/index.js from-parquet-events --workers={{ .Values.apiWriter.config.replayEvents.workers }}
+          command:
+          - node
+          args:
+          - "./lib/index.js"
+          - "from-parquet-events"
+          - {{ printf "--workers=%d" (int .Values.apiWriter.config.replayEvents.workers) | quote }}
+          - {{ printf "--max-old-space-size=%d" (int .Values.apiWriter.config.replayEvents.maxOldSize) | quote }}
           {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.apiWriter.resources }}
-          resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
+          {{- if .Values.apiWriter.config.replayEvents.resources }}
+          resources: {{- toYaml .Values.apiWriter.config.replayEvents.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
