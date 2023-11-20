@@ -101,7 +101,7 @@ spec:
           {{- if .Values.apiWriter.resources }}
           resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
           {{- end }}
-        {{- if .Values.apiWriter.config.exportEvents }}
+        {{- if .Values.apiWriter.config.exportEvents.enabled }}
         - name: export-events
           image: {{ template "stacksBlockchainApi.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
@@ -145,7 +145,29 @@ spec:
               subPath: {{ .Values.apiWriter.persistence.data.subPath }}
               {{- end }}
         {{- end }}
-        {{- if .Values.apiWriter.config.dataArchiveUrl }}
+        {{- if and (.Values.apiWriter.config.exportEvents.enabled) (.Values.apiWriter.config.exportEvents.compressEventsData) }}
+        - name: compress-events-data
+          image: google/cloud-sdk:alpine
+          env:
+            - name: STACKS_EXPORT_EVENTS_PATH
+              value: {{.Values.apiWriter.persistence.data.mountPath}}
+            - name: STACKS_EXPORT_EVENTS_FILE
+              value: {{ .Values.apiWriter.persistence.data.mountPath }}/stacks-node-events.tsv
+          command:
+            - sh
+            - -c
+            - |
+              echo "Installing pigz and tar"
+              apk add pigz tar
+              tar -I pigz -cvf ${STACKS_EXPORT_EVENTS_PATH}/stacks-node-events.tsv.gz ${STACKS_EXPORT_EVENTS_FILE}
+          {{- if .Values.apiWriter.resources}}
+          resources: {{- toYaml .Values.apiWriter.resources | nindent 12}}
+          {{- end}}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.apiWriter.persistence.data.mountPath }}
+        {{- end }}
+        {{- if and (.Values.apiWriter.config.dataArchiveUrl) (eq .Values.apiWriter.config.exportEvents false) }}
         - name: download-archive-data
           image: {{ template "stacksBlockchainApiEventReplay.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
