@@ -75,8 +75,7 @@ apiWriter:
     # Replay events from the API's TSV file into the Postgres database
     # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
 
-    # Note: both exportEvents.enabled and exportEvents.compressEventsData should be set to 'true' in most common situations
-    # followed by replayEvents also set to 'true'
+    # Note: exportEvents.compressEventsData should be set to 'true' when you intend to replayEvents immediately after
     exportEvents:
       enabled:  false
       compressEventsData: false
