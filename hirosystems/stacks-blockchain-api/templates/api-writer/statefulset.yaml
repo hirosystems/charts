@@ -167,7 +167,7 @@ spec:
             - name: data
               mountPath: {{ .Values.apiWriter.persistence.data.mountPath }}
         {{- end }}
-        {{- if and (.Values.apiWriter.config.dataArchiveUrl) (eq .Values.apiWriter.config.exportEvents false) }}
+        {{- if and (.Values.apiWriter.config.dataArchiveUrl) (eq .Values.apiWriter.config.exportEvents.enabled false) }}
         - name: download-archive-data
           image: {{ template "stacksBlockchainApiEventReplay.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
