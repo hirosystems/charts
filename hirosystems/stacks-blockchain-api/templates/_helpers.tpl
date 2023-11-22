@@ -1,4 +1,11 @@
 {{/*
+Return the name of the Stacks-Blockchain API Event Replay image name used for the download and replay init containers
+*/}}
+{{- define "stacksBlockchainApiEventReplay.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.apiWriter.replayEvents.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Stacks-Blockchain API image name
 */}}
 {{- define "stacksBlockchainApi.image" -}}

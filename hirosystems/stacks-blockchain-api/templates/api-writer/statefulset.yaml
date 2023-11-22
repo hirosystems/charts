@@ -101,7 +101,7 @@ spec:
           {{- if .Values.apiWriter.resources }}
           resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
           {{- end }}
-        {{- if .Values.apiWriter.config.exportEvents }}
+        {{- if .Values.apiWriter.config.exportEvents.enabled }}
         - name: export-events
           image: {{ template "stacksBlockchainApi.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
@@ -145,9 +145,31 @@ spec:
               subPath: {{ .Values.apiWriter.persistence.data.subPath }}
               {{- end }}
         {{- end }}
-        {{- if .Values.apiWriter.config.dataArchiveUrl }}
+        {{- if and (.Values.apiWriter.config.exportEvents.enabled) (.Values.apiWriter.config.exportEvents.compressEventsData) }}
+        - name: compress-events-data
+          image: google/cloud-sdk:alpine
+          env:
+            - name: STACKS_EXPORT_EVENTS_PATH
+              value: {{.Values.apiWriter.persistence.data.mountPath}}
+            - name: STACKS_EXPORT_EVENTS_FILE
+              value: {{ .Values.apiWriter.persistence.data.mountPath }}/stacks-node-events.tsv
+          command:
+            - sh
+            - -c
+            - |
+              echo "Installing pigz and tar"
+              apk add pigz tar
+              tar -I pigz -cvf ${STACKS_EXPORT_EVENTS_PATH}/stacks-node-events.tsv.gz ${STACKS_EXPORT_EVENTS_FILE}
+          {{- if .Values.apiWriter.resources}}
+          resources: {{- toYaml .Values.apiWriter.resources | nindent 12}}
+          {{- end}}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.apiWriter.persistence.data.mountPath }}
+        {{- end }}
+        {{- if and (.Values.apiWriter.config.dataArchiveUrl) (eq .Values.apiWriter.config.exportEvents.enabled false) }}
         - name: download-archive-data
-          image: alpine
+          image: {{ template "stacksBlockchainApiEventReplay.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
           env:
             - name: ARCHIVE_URL
@@ -161,7 +183,9 @@ spec:
               if [ -z "$(ls -A "${DATA_DIR}" | grep -v "lost+found")" ]; then
                 echo "Downloading archive"
                 wget ${ARCHIVE_URL} -O ${DATA_DIR}/stacks-node-events.tsv.gz
-                gzip -d ${DATA_DIR}/stacks-node-events.tsv.gz
+                cp -r parquet_generator ${DATA_DIR}
+                cd ${DATA_DIR}
+                python3 -m parquet_generator --tsv-file ${DATA_DIR}/stacks-node-events.tsv.gz
               else
                 echo "Previous data found. Exiting."
               fi
@@ -212,52 +236,65 @@ spec:
           image: {{ template "stacksBlockchainApi.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.pullPolicy | quote }}
           env:
-            - name: STACKS_EXPORT_EVENTS_FILE
-              value: {{ .Values.apiWriter.persistence.data.mountPath }}/stacks-node-events.tsv
+            - name: --max-old-space-size
+              value: {{ .Values.apiWriter.config.replayEvents.maxOldSize }}
+            - name: STACKS_API_LOG_LEVEL
+              value: {{ ternary "debug" "info" (or .Values.apiWriter.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: STACKS_CHAIN_ID
+              {{- if eq .Values.blockchainNetwork "mainnet" }}
+              value: "0x00000001"
+              {{- else }}
+              value: "0x80000000"
+              {{- end }}
+            - name: STACKS_EVENTS_DIR
+              value: {{ .Values.apiWriter.persistence.data.mountPath }}/events
+            - name: PG_DATABASE
+              value: {{ include "postgresql.database" .Subcharts.postgresql }}
+            - name: PG_SCHEMA
+              value: {{ include "postgresql.database" .Subcharts.postgresql }}
+            - name: PG_PRIMARY_HOST
+              value: {{ include "postgresql.primary.fullname" .Subcharts.postgresql }}
             - name: PG_HOST
               value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
             - name: PG_PORT
               value: {{ include "postgresql.service.port" .Subcharts.postgresql | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
-            - name: PG_DATABASE
-              value: {{ include "postgresql.database" .Subcharts.postgresql | quote }}
-            - name: PG_SCHEMA
-              value: {{ include "postgresql.database" .Subcharts.postgresql }}
-            - name: PG_CONNECTION_POOL_MAX
-              value: {{ .Values.apiWriter.config.pgConnectionPoolMax | quote }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: {{ include "postgresql.adminPasswordKey" .Subcharts.postgresql | quote }}
                   name: {{ include "postgresql.secretName" .Subcharts.postgresql | quote }}
-            - name: PG_IDENT_INDEX_TYPE
-              value: hash
-            - name: NODE_ENV
-              value: production
-            - name: BNS_IMPORT_DIR
-              value: {{ .Values.apiWriter.persistence.bns.mountPath }}
-            - name: STACKS_API_EVENT_REPLAY_LOG_LEVEL
-              value: debug
-            - name: STACKS_API_ENABLE_FT_METADATA
-              value: {{ ternary "1" "0" .Values.apiWriter.config.enableFtMetadata | quote }}
-            - name: STACKS_API_ENABLE_NFT_METADATA
-              value: {{ ternary "1" "0" .Values.apiWriter.config.enableNftMetadata | quote }}
-          command:
-            - sh
-            - -c
-            {{- if .Values.apiWriter.config.replayEvents.prunedMode }}
-            - |
-              node ./lib/index.js import-events --file ${STACKS_EXPORT_EVENTS_FILE} --wipe-db --force --mode pruned
-            {{- else }}
-            - |
-              node ./lib/index.js import-events --file ${STACKS_EXPORT_EVENTS_FILE} --wipe-db --force
+            - name: PG_APPLICATION_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PG_CONNECTION_POOL_MAX
+              value: {{ default "50" .Values.apiWriter.config.pgConnectionPoolMax | quote }}
+            {{- if .Values.apiWriter.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- if .Values.apiWriter.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.apiWriter.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          command:
+          - node
+          args:
+          - "./lib/index.js"
+          - "from-parquet-events"
+          - {{ printf "--workers=%d" (int .Values.apiWriter.config.replayEvents.workers) | quote }}
+          - {{ printf "--max-old-space-size=%d" (int .Values.apiWriter.config.replayEvents.maxOldSize) | quote }}
           {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.apiWriter.resources }}
-          resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
+          {{- if .Values.apiWriter.config.replayEvents.resources }}
+          resources: {{- toYaml .Values.apiWriter.config.replayEvents.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data

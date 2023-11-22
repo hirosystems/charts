@@ -74,10 +74,28 @@ apiWriter:
     # dataArchiveUrl: https://storage.googleapis.com/hirosystems-archive/mainnet/api/mainnet-blockchain-api-5.0.0-latest.tar.gz
     # Replay events from the API's TSV file into the Postgres database
     # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
+
+    # Note: exportEvents.compressEventsData should be set to 'true' when you intend to replayEvents immediately after
+    exportEvents:
+      enabled:  false
+      compressEventsData: false
     replayEvents:
       enabled: false
-      prunedMode: true
-    exportEvents: false
+      image:
+        registry: docker.io
+        repository: hirosystems/stacks-event-replay
+        tag: 1.0.2
+      workers: 4
+      maxOldSize: 8192
+      resources:
+        # limits:
+        #   memory: 1.5Gi
+        # requests:
+        #   cpu: 100m
+        #   memory: 1.5Gi
+        limits: {}
+        requests:
+          memory: 32Gi
     enableFtMetadata: true
     enableNftMetadata: false
     bindAddress: "0.0.0.0"
