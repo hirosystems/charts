@@ -88,7 +88,7 @@ Return name of the CDN secret
 Return name of the Postgres user
 */}}
 {{- define "stacksBlockchainApi.postgresql.username" -}}
-{{ default "postgres" (include "postgresql.username" .Subcharts.postgresql) }}
+{{ default "postgres" (include "postgresql.v1.username" .Subcharts.postgresql) }}
 {{- end -}}
 
 

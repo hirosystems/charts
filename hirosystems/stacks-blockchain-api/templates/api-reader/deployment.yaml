@@ -125,22 +125,22 @@ spec:
             - name: STACKS_ADDRESS_CACHE_SIZE
               value: {{ default "50000" .Values.apiReader.config.stacksAddressCacheSize | quote }}
             - name: PG_DATABASE
-              value: {{ include "postgresql.database" .Subcharts.postgresql }}
+              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
             - name: PG_SCHEMA
-              value: {{ include "postgresql.database" .Subcharts.postgresql }}
+              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
             - name: PG_PRIMARY_HOST
-              value: {{ include "postgresql.primary.fullname" .Subcharts.postgresql }}
+              value: {{ include "postgresql.v1.primary.fullname" .Subcharts.postgresql }}
             - name: PG_HOST
               value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
             - name: PG_PORT
-              value: {{ include "postgresql.service.port" .Subcharts.postgresql | quote }}
+              value: {{ include "postgresql.v1.service.port" .Subcharts.postgresql | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: {{ include "postgresql.adminPasswordKey" .Subcharts.postgresql }}
-                  name: {{ include "postgresql.secretName" .Subcharts.postgresql }}
+                  key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql }}
+                  name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql }}
             - name: PG_APPLICATION_NAME
               valueFrom:
                 fieldRef:
