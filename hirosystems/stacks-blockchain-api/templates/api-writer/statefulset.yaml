@@ -290,6 +290,7 @@ spec:
           args:
           - "./lib/index.js"
           - "from-parquet-events"
+          - {{ printf "--workers=%d" (int .Values.apiWriter.config.replayEvents.workers) | quote }}
           {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

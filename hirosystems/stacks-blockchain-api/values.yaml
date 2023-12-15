@@ -85,6 +85,7 @@ apiWriter:
         registry: docker.io
         repository: hirosystems/stacks-event-replay
         tag: 1.0.2
+      workers: 4
       maxOldSize: 8192
       resources:
         # limits:
