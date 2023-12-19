@@ -271,6 +271,8 @@ spec:
                   fieldPath: metadata.name
             - name: PG_CONNECTION_POOL_MAX
               value: {{ default "50" .Values.apiWriter.config.pgConnectionPoolMax | quote }}
+            - name: NODE_OPTIONS
+              value: {{ printf "--max-old-space-size=%d" (int .Values.apiWriter.config.replayEvents.maxOldSize) | quote }}
             {{- if .Values.apiWriter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -289,7 +291,6 @@ spec:
           - "./lib/index.js"
           - "from-parquet-events"
           - {{ printf "--workers=%d" (int .Values.apiWriter.config.replayEvents.workers) | quote }}
-          - {{ printf "--max-old-space-size=%d" (int .Values.apiWriter.config.replayEvents.maxOldSize) | quote }}
           {{- if .Values.apiWriter.initContainerSecurityContext.enabled }}
           securityContext: {{- omit .Values.apiWriter.initContainerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
