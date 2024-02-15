@@ -557,7 +557,7 @@ apiWriter:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 11-debian-11-r89
+      tag: 11-debian-11-r110
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
