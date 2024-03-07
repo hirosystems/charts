@@ -75,6 +75,10 @@ apiWriter:
     # Replay events from the API's TSV file into the Postgres database
     # CAUTION: THIS WILL WIPE YOUR CURRENT DATABASE
 
+    ## @param bns Enable or disable BNS
+    ##
+    bns:
+      enabled: true
     # Note: exportEvents.compressEventsData should be set to 'true' when you intend to replayEvents immediately after
     exportEvents:
       enabled:  false
@@ -114,7 +118,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.3.6
+    tag: 7.8.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -610,7 +614,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.3.6
+    tag: 7.8.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -968,7 +972,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.3.6
+    tag: 7.8.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

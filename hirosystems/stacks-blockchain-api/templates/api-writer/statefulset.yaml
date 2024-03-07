@@ -395,8 +395,10 @@ spec:
             {{- end }}
             - name: NODE_ENV
               value: production
+            {{- if .Values.apiWriter.config.bns.enabled }}
             - name: BNS_IMPORT_DIR
               value: {{ .Values.apiWriter.persistence.bns.mountPath }}
+            {{- end }}
             {{- if .Values.apiWriter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
