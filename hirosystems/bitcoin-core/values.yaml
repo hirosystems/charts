@@ -73,8 +73,9 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: ruimarinho/bitcoin-core
-  tag: 22-alpine
+  repository: dobtc/bitcoin
+  tag: "25.1"
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -436,6 +437,11 @@ service:
     ##
     # rpc: 38332
     # p2p: 38333
+    ## @param service.ports.rpcTargetPort bitcoin-core service RPC target port
+    ## @param service.ports.p2pTargetPort bitcoin-core service P2P target port
+    ##
+    # rpcTargetPort: 8332
+    # p2pTargetPort: 8333
   ## Node ports to expose
   ## @param service.nodePorts.rpc Node port for RPC
   ## @param service.nodePorts.p2p Node port for P2P

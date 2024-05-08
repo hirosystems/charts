@@ -1,7 +1,7 @@
 annotations:
   category: Blockchain
 apiVersion: v2
-appVersion: 22.0
+appVersion: 25.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ sources:
   - https://github.com/bitcoin/bitcoin
   - https://github.com/ruimarinho/docker-bitcoin-core
   - https://bitcoin.org
-version: 2.0.3
+version: 2.1.0
