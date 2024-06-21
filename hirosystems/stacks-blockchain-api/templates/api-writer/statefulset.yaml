@@ -71,6 +71,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.apiWriter.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        {{- if .Values.apiWriter.bns.enabled }}
         - name: download-bns-data
           image: alpine
           imagePullPolicy: IfNotPresent
@@ -101,6 +102,7 @@ spec:
           {{- if .Values.apiWriter.resources }}
           resources: {{- toYaml .Values.apiWriter.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
         {{- if .Values.apiWriter.config.exportEvents.enabled }}
         - name: export-events
           image: {{ template "stacksBlockchainApi.image" . }}
