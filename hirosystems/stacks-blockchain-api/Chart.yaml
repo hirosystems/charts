@@ -41,4 +41,4 @@ sources:
   - https://github.com/hirosystems/stacks-blockchain-api
   - https://docs.hiro.so/api
   - https://docs.hiro.so/get-started/stacks-blockchain-api
-version: 5.0.6
+version: 5.0.7
