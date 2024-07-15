@@ -71,7 +71,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.apiWriter.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if .Values.apiWriter.bns.enabled }}
+        {{- if .Values.apiWriter.config.bns.enabled }}
         - name: download-bns-data
           image: alpine
           imagePullPolicy: IfNotPresent

@@ -367,87 +367,86 @@ apiWriter:
     ##   - e2e-az2
     ##
     values: []
+  ## @param apiWriter.affinity Affinity for Stacks Blockchain API Writer pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `apiWriter.podAffinityPreset`, `apiWriter.podAntiAffinityPreset`, and `apiWriter.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param apiWriter.nodeSelector Node labels for Stacks Blockchain API Writer pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param apiWriter.tolerations Tolerations for Stacks Blockchain API Writer pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param apiWriter.updateStrategy.type Stacks Blockchain API Writer statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
 
-    ## @param apiWriter.affinity Affinity for Stacks Blockchain API Writer pods assignment
-    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## NOTE: `apiWriter.podAffinityPreset`, `apiWriter.podAntiAffinityPreset`, and `apiWriter.nodeAffinityPreset` will be ignored when it's set
-    ##
-    affinity: {}
-    ## @param apiWriter.nodeSelector Node labels for Stacks Blockchain API Writer pods assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-    ##
-    nodeSelector: {}
-    ## @param apiWriter.tolerations Tolerations for Stacks Blockchain API Writer pods assignment
-    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    ##
-    tolerations: []
-    ## @param apiWriter.updateStrategy.type Stacks Blockchain API Writer statefulset strategy type
-    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-    ##
-    updateStrategy:
-      ## StrategyType
-      ## Can be set to RollingUpdate or OnDelete
-      ##
-      type: RollingUpdate
-
-    ## @param apiWriter.priorityClassName Stacks Blockchain API Writer pods' priorityClassName
-    ##
-    priorityClassName: ""
-    ## @param apiWriter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
-    ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-    ##
-    topologySpreadConstraints: []
-    ## @param apiWriter.schedulerName Name of the k8s scheduler (other than default) for Stacks Blockchain API Writer pods
-    ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-    ##
-    schedulerName: ""
-    ## @param apiWriter.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
-    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
-    ##
-    terminationGracePeriodSeconds: ""
-    ## @param apiWriter.lifecycleHooks for the Stacks Blockchain API Writer container(s) to automate configuration before or after startup
-    ##
-    lifecycleHooks: {}
-    ## @param apiWriter.extraEnvVars Array with extra environment variables to add to Stacks Blockchain API Writer nodes
-    ## e.g:
-    ## extraEnvVars:
-    ##   - name: FOO
-    ##     value: "bar"
-    ##
-    extraEnvVars: []
-    ## @param apiWriter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Stacks Blockchain API Writer nodes
-    ##
-    extraEnvVarsCM: ""
-    ## @param apiWriter.extraEnvVarsSecret Name of existing Secret containing extra env vars for Stacks Blockchain API Writer nodes
-    ##
-    extraEnvVarsSecret: ""
-    ## @param apiWriter.extraVolumes Optionally specify extra list of additional volumes for the Stacks Blockchain API Writer pod(s)
-    ##
-    extraVolumes: []
-    ## @param apiWriter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Stacks Blockchain API Writer container(s)
-    ##
-    extraVolumeMounts: []
-    ## @param apiWriter.sidecars Add additional sidecar containers to the Stacks Blockchain API Writer pod(s)
-    ## e.g:
-    ## sidecars:
-    ##   - name: your-image-name
-    ##     image: your-image
-    ##     imagePullPolicy: Always
-    ##     ports:
-    ##       - name: portname
-    ##         containerPort: 1234
-    ##
-    sidecars: []
-    ## @param apiWriter.initContainers Add additional init containers to the Stacks Blockchain API Writer pod(s)
-    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-    ## e.g:
-    ## initContainers:
-    ##  - name: your-image-name
-    ##    image: your-image
-    ##    imagePullPolicy: Always
-    ##    command: ['sh', '-c', 'echo "hello world"']
-    ##
-    initContainers: []
+  ## @param apiWriter.priorityClassName Stacks Blockchain API Writer pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param apiWriter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param apiWriter.schedulerName Name of the k8s scheduler (other than default) for Stacks Blockchain API Writer pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param apiWriter.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param apiWriter.lifecycleHooks for the Stacks Blockchain API Writer container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param apiWriter.extraEnvVars Array with extra environment variables to add to Stacks Blockchain API Writer nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param apiWriter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Stacks Blockchain API Writer nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param apiWriter.extraEnvVarsSecret Name of existing Secret containing extra env vars for Stacks Blockchain API Writer nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param apiWriter.extraVolumes Optionally specify extra list of additional volumes for the Stacks Blockchain API Writer pod(s)
+  ##
+  extraVolumes: []
+  ## @param apiWriter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Stacks Blockchain API Writer container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param apiWriter.sidecars Add additional sidecar containers to the Stacks Blockchain API Writer pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param apiWriter.initContainers Add additional init containers to the Stacks Blockchain API Writer pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
 
   ## @section Persistence Parameters
 
