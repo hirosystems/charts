@@ -45,7 +45,7 @@ spec:
   loadBalancerIP: {{ $.Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: tcp-rpc
+    - name: http-rpc
       port: {{ $.Values.service.ports.rpc }}
       {{- if $.Values.service.ports.rpcTargetPort }}
       targetPort: {{ $.Values.service.ports.rpcTargetPort }}
