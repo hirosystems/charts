@@ -2114,6 +2114,53 @@ entries:
       category: ApplicationServer
     apiVersion: v2
     appVersion: 7.12.0
+    created: "2024-07-19T20:06:40.714717517Z"
+    dependencies:
+    - condition: stacks-blockchain.enabled
+      name: stacks-blockchain
+      repository: https://charts.hiro.so/hirosystems
+      tags:
+      - hirosystems-stacks-blockchain
+      version: 2.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-postgresql
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: API for the Stacks 2.1 blockchain
+    digest: e05e691b91dc6df775934581ae65b7863aeef99ab81ff12360535182873246db
+    home: https://github.com/hirosystems/stacks-blockchain-api
+    icon: https://raw.githubusercontent.com/hirosystems/docs/23569271aefa63e87626d2d7c598d18a4a852be5/public/home.svg
+    keywords:
+    - stacks
+    - stx
+    - blockchain
+    - hiro
+    - bitcoin
+    - bitcoind
+    - btc
+    - api
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: stacks-blockchain-api
+    sources:
+    - https://github.com/hirosystems/stacks-blockchain-api
+    - https://docs.hiro.so/api
+    - https://docs.hiro.so/get-started/stacks-blockchain-api
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-5.0.10/stacks-blockchain-api-5.0.10.tgz
+    version: 5.0.10
+  - annotations:
+      category: ApplicationServer
+    apiVersion: v2
+    appVersion: 7.12.0
     created: "2024-07-15T19:45:33.69093344Z"
     dependencies:
     - condition: stacks-blockchain.enabled
@@ -4930,4 +4977,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-15T19:45:33.69149905Z"
+generated: "2024-07-19T20:06:40.715275826Z"
