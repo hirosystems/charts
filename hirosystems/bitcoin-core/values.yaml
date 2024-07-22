@@ -264,6 +264,10 @@ hostAliases: []
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
+## @param statefulsetAnnotations Annotations for bitcoin-core StatefulSet
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+statefulsetAnnotations: {}
 ## @param podAnnotations Annotations for bitcoin-core pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
