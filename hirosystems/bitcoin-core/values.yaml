@@ -446,6 +446,11 @@ service:
     ##
     # rpcTargetPort: 8332
     # p2pTargetPort: 8333
+    ## @param service.ports.rpcAppProtocol bitcoin-core service RPC app protocol
+    ## @param service.ports.p2pAppProtocol bitcoin-core service P2P app protocol
+    ##
+    # rpcAppProtocol: http
+    # p2pAppProtocol: tcp
   ## Node ports to expose
   ## @param service.nodePorts.rpc Node port for RPC
   ## @param service.nodePorts.p2p Node port for P2P

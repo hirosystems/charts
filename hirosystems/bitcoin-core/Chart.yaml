@@ -25,4 +25,4 @@ sources:
   - https://github.com/bitcoin/bitcoin
   - https://github.com/ruimarinho/docker-bitcoin-core
   - https://bitcoin.org
-version: 2.1.4
+version: 2.1.5

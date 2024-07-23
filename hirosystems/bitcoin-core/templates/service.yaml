@@ -40,6 +40,9 @@ spec:
   {{- end }}
   ports:
     - name: http-rpc
+      {{- if .Values.service.ports.rpcAppProtocol }}
+      appProtocol: {{ .Values.service.ports.rpcAppProtocol }}
+      {{- end }}
       port: {{ .Values.service.ports.rpc }}
       {{- if .Values.service.ports.rpcTargetPort }}
       targetPort: {{ .Values.service.ports.rpcTargetPort }}
@@ -51,6 +54,9 @@ spec:
       nodePort: null
       {{- end }}
     - name: tcp-p2p
+      {{- if .Values.service.ports.p2pAppProtocol }}
+      appProtocol: {{ .Values.service.ports.p2pAppProtocol }}
+      {{- end }}
       port: {{ .Values.service.ports.p2p }}
       {{- if .Values.service.ports.p2pTargetPort }}
       targetPort: {{ .Values.service.ports.p2pTargetPort }}
