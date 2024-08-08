@@ -1603,17 +1603,26 @@ postgresql:
     #       REVOKE ALL ON SCHEMA public FROM public;
     #       REVOKE ALL ON SCHEMA stacks_blockchain_api FROM public;
     #       GRANT ALL ON SCHEMA stacks_blockchain_api TO postgres;
-    # initContainers:
-    #   - name: pg-init-helper
-    #     image: google/cloud-sdk:alpine
-    #     command: [ "/bin/bash", "-c", "--" ]
-    #     args: [ "curl https://archive.stg.hiro.so/mainnet/stacks-blockchain-api-pg/stacks-blockchain-api-pg-15-latest.dump -o /bitnami/postgresql/stacks-blockchain-api-postgres.dump" ]
-    #     securityContext:
-    #       runAsGroup: 0
-    #       runAsNonRoot: true
-    #       runAsUser: 1337
-    #     volumeMounts:
-    #        - mountPath: /bitnami/postgresql
-    #          name: data
+    initContainers:
+      - name: pg-init-helper
+        image: google/cloud-sdk:alpine
+        command:
+          - /bin/sh
+          - -c
+          - --
+          - |
+            if [ -z "$(ls -A /bitnami/postgresql)" ]; then
+              echo "Postgres dir is empty, downloading archive file..."
+              curl https://archive.hiro.so/mainnet/stacks-blockchain-api-pg/stacks-blockchain-api-pg-15-latest.dump -o /bitnami/postgresql/stacks-blockchain-api-postgres.dump
+            else
+              echo "Postgres dir is not empty, exiting..."
+            fi
+        securityContext:
+          runAsGroup: 0
+          runAsNonRoot: true
+          runAsUser: 1337
+        volumeMounts:
+           - mountPath: /bitnami/postgresql
+             name: data
     persistence:
       size: 50Gi
