@@ -2207,6 +2207,53 @@ entries:
       category: ApplicationServer
     apiVersion: v2
     appVersion: 7.12.0
+    created: "2024-08-08T23:11:46.910162125Z"
+    dependencies:
+    - condition: stacks-blockchain.enabled
+      name: stacks-blockchain
+      repository: https://charts.hiro.so/hirosystems
+      tags:
+      - hirosystems-stacks-blockchain
+      version: 2.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-postgresql
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: API for the Stacks 2.1 blockchain
+    digest: ad0be0ec399eb45ff8922315fde89c27a01f792c146626a7fe084758c2cffe90
+    home: https://github.com/hirosystems/stacks-blockchain-api
+    icon: https://raw.githubusercontent.com/hirosystems/docs/23569271aefa63e87626d2d7c598d18a4a852be5/public/home.svg
+    keywords:
+    - stacks
+    - stx
+    - blockchain
+    - hiro
+    - bitcoin
+    - bitcoind
+    - btc
+    - api
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: stacks-blockchain-api
+    sources:
+    - https://github.com/hirosystems/stacks-blockchain-api
+    - https://docs.hiro.so/api
+    - https://docs.hiro.so/get-started/stacks-blockchain-api
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-5.0.11/stacks-blockchain-api-5.0.11.tgz
+    version: 5.0.11
+  - annotations:
+      category: ApplicationServer
+    apiVersion: v2
+    appVersion: 7.12.0
     created: "2024-07-19T20:06:40.714717517Z"
     dependencies:
     - condition: stacks-blockchain.enabled
@@ -5070,4 +5117,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-23T18:42:39.773018847Z"
+generated: "2024-08-08T23:11:46.910743482Z"
