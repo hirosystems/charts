@@ -147,6 +147,8 @@ spec:
                   fieldPath: metadata.name
             - name: PG_CONNECTION_POOL_MAX
               value: {{ default "50" .Values.apiReader.config.pgConnectionPoolMax | quote }}
+            - name: PG_STATEMENT_TIMEOUT
+              value: {{ default "0" .Values.apiReader.config.pgStatementTimeout | quote }}
             {{- if .Values.cdn.enabled }}
             - name: IMGIX_TOKEN
               valueFrom:

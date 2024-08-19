@@ -118,7 +118,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.12.0
+    tag: 7.13.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -600,6 +600,7 @@ apiReader:
     enableFtMetadata: true
     enableNftMetadata: false
     pgConnectionPoolMax: "50"
+    pgStatementTimeout: "30000" # ms
     stacksAddressCacheSize: "50000"
   ## Hiro Systems stacks-blockchain-api image
   ## ref: https://hub.docker.com/r/hirosystems/stacks-blockchain-api/tags/
@@ -613,7 +614,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.12.0
+    tag: 7.13.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -958,6 +959,7 @@ apiRosettaReader:
     enableFtMetadata: true
     enableNftMetadata: false
     pgConnectionPoolMax: "50"
+    pgStatementTimeout: "30000" # ms
     stacksAddressCacheSize: "50000"
   ## Hiro Systems stacks-blockchain-api image
   ## ref: https://hub.docker.com/r/hirosystems/stacks-blockchain-api/tags/
@@ -971,7 +973,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 7.12.0
+    tag: 7.13.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
