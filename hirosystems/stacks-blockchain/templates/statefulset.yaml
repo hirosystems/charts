@@ -271,7 +271,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
           {{- end }}
           {{- if .Values.persistence.labels }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
           {{- end }}
       spec:
         accessModes:
