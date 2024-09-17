@@ -101,8 +101,10 @@ spec:
             - name: STACKS_CHAIN_ID
               {{- if eq .Values.blockchainNetwork "mainnet" }}
               value: "0x00000001"
-              {{- else }}
+              {{- else if eq .Values.blockchainNetwork "testnet" }}
               value: "0x80000000"
+              {{- else }}
+              value: {{ default "0x80000000" .Values.blockchainNetwork | quote }}
               {{- end }}
             - name: STACKS_CORE_EVENT_PORT
               value: {{ default "3700" .Values.apiRosettaReader.containerPorts.socket | quote }}
