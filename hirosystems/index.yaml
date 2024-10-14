@@ -2246,6 +2246,53 @@ entries:
       category: ApplicationServer
     apiVersion: v2
     appVersion: 8.0.0
+    created: "2024-10-14T21:11:23.497629174Z"
+    dependencies:
+    - condition: stacks-blockchain.enabled
+      name: stacks-blockchain
+      repository: https://charts.hiro.so/hirosystems
+      tags:
+      - hirosystems-stacks-blockchain
+      version: 2.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-postgresql
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: API for the Stacks 2.1 blockchain
+    digest: 8a2478f12775de47f9453fb798de6ee794a06d0802b5d8d357a233a850666b14
+    home: https://github.com/hirosystems/stacks-blockchain-api
+    icon: https://raw.githubusercontent.com/hirosystems/docs/23569271aefa63e87626d2d7c598d18a4a852be5/public/home.svg
+    keywords:
+    - stacks
+    - stx
+    - blockchain
+    - hiro
+    - bitcoin
+    - bitcoind
+    - btc
+    - api
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: stacks-blockchain-api
+    sources:
+    - https://github.com/hirosystems/stacks-blockchain-api
+    - https://docs.hiro.so/api
+    - https://docs.hiro.so/get-started/stacks-blockchain-api
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-5.1.1/stacks-blockchain-api-5.1.1.tgz
+    version: 5.1.1
+  - annotations:
+      category: ApplicationServer
+    apiVersion: v2
+    appVersion: 8.0.0
     created: "2024-09-17T17:24:18.866556738Z"
     dependencies:
     - condition: stacks-blockchain.enabled
@@ -5297,4 +5344,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2024-09-17T17:24:18.867221753Z"
+generated: "2024-10-14T21:11:23.498239738Z"
