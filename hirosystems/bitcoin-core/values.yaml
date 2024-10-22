@@ -627,11 +627,11 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-  ## @param persistence.accessModes Persistent Volume Access Modes
-  ##
   ## @param persistence.annotations Persistent Volume Claim labels
   ##
   labels: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
   accessModes:
     - ReadWriteOnce
   ## @param persistence.size Size of data volume
