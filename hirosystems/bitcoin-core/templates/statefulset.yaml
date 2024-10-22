@@ -253,7 +253,8 @@ spec:
           {{- if .Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
-        labels: {{- if .Values.commonLabels}}
+        labels:
+          {{- if .Values.commonLabels}}
           {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10}}
           {{- end}}
           {{- if .Values.persistence.labels}}
