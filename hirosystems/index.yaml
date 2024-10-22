@@ -5,6 +5,37 @@ entries:
       category: Blockchain
     apiVersion: v2
     appVersion: "25.1"
+    created: "2024-10-22T18:44:32.078344126Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Bitcoin Core Node
+    digest: c19cdcf78593da96a078241be8a2bd2f68adad2b1abc7b85901fb7085702e496
+    home: https://github.com/bitcoin/bitcoin
+    icon: https://bitcoin.org/img/icons/opengraph.png?1657703267
+    keywords:
+    - bitcoin
+    - bitcoind
+    - btc
+    - blockchain
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: bitcoin-core
+    sources:
+    - https://github.com/bitcoin/bitcoin
+    - https://github.com/ruimarinho/docker-bitcoin-core
+    - https://bitcoin.org
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/bitcoin-core-2.1.6/bitcoin-core-2.1.6.tgz
+    version: 2.1.6
+  - annotations:
+      category: Blockchain
+    apiVersion: v2
+    appVersion: "25.1"
     created: "2024-07-23T18:42:39.772421355Z"
     dependencies:
     - name: common
@@ -5344,4 +5375,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-14T21:11:23.498239738Z"
+generated: "2024-10-22T18:44:32.078959651Z"
