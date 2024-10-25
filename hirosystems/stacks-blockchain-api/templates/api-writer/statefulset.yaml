@@ -111,22 +111,22 @@ spec:
             - name: STACKS_EXPORT_EVENTS_FILE
               value: {{ .Values.apiWriter.persistence.data.mountPath }}/stacks-node-events.tsv
             - name: PG_HOST
-              value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
+              value: {{ include "stacksBlockchainApi.postgresql.host" . }}
             - name: PG_PORT
-              value: {{ include "postgresql.v1.service.port" .Subcharts.postgresql | quote }}
+              value: {{ include "stacksBlockchainApi.postgresql.port" . | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
             - name: PG_DATABASE
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql | quote }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_SCHEMA
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_CONNECTION_POOL_MAX
               value: {{ .Values.apiWriter.config.pgConnectionPoolMax | quote }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql | quote }}
-                  name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql | quote }}
+                  key: {{ include "stacksBlockchainApi.postgresql.passwordSecretKey" . }}
+                  name: {{ include "stacksBlockchainApi.postgresql.passwordSecretName" . }}
             - name: DATA_DIR
               value: {{ .Values.apiWriter.persistence.data.mountPath }}
           command:
@@ -253,22 +253,22 @@ spec:
             - name: STACKS_EVENTS_DIR
               value: {{ .Values.apiWriter.persistence.data.mountPath }}/events
             - name: PG_DATABASE
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_SCHEMA
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_PRIMARY_HOST
-              value: {{ include "postgresql.v1.primary.fullname" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.primary_host" . }}
             - name: PG_HOST
-              value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
+              value: {{ include "stacksBlockchainApi.postgresql.host" . }}
             - name: PG_PORT
-              value: {{ include "postgresql.v1.service.port" .Subcharts.postgresql | quote }}
+              value: {{ include "stacksBlockchainApi.postgresql.port" . | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql | quote }}
-                  name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql | quote }}
+                  key: {{ include "stacksBlockchainApi.postgresql.passwordSecretKey" . }}
+                  name: {{ include "stacksBlockchainApi.postgresql.passwordSecretName" . }}
             - name: PG_APPLICATION_NAME
               valueFrom:
                 fieldRef:
@@ -364,22 +364,22 @@ spec:
             - name: STACKS_API_TOKEN_METADATA_STRICT_MODE
               value: {{ ternary "1" "0" .Values.apiWriter.config.enableTokenMetadataStrictMode | quote }}
             - name: PG_DATABASE
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_SCHEMA
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_PRIMARY_HOST
-              value: {{ include "postgresql.v1.primary.fullname" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.primary_host" . }}
             - name: PG_HOST
-              value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
+              value: {{ include "stacksBlockchainApi.postgresql.host" . }}
             - name: PG_PORT
-              value: {{ include "postgresql.v1.service.port" .Subcharts.postgresql | quote }}
+              value: {{ include "stacksBlockchainApi.postgresql.port" . | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql }}
-                  name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql }}
+                  key: {{ include "stacksBlockchainApi.postgresql.passwordSecretKey" . }}
+                  name: {{ include "stacksBlockchainApi.postgresql.passwordSecretName" . }}
             - name: PG_APPLICATION_NAME
               valueFrom:
                 fieldRef:

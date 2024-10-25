@@ -1562,6 +1562,19 @@ stacks-blockchain:
   #   retry_count = 255
   #   events_keys = ["*"]
 
+## Postgresql Connection
+## You need to change below configuration in case of bringing your own PostgresSQL instance and also set postgresql.enabled:false
+connections:
+  db_host: postgresql
+  db_primary_host: postgresql
+  db_user: stacksuser
+  db_name: stacksdb
+  db_port: 5432
+  ## @param connections.serviceMonitor.db_password_secret_name Specify the k8s secret name for db password
+  db_password_secret_name: stackssecret
+  ## @param connections.serviceMonitor.db_password_secret_key Specify the password key name inside the k8s secret
+  db_password_secret_key: password
+
 ## Postgresql Subchart
 ##
 postgresql:
