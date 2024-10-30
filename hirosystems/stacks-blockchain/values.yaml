@@ -724,7 +724,8 @@ metrics:
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor
+    ## (also requires `metrics.enabled` and either `singleService` or `uniqueServices` to be `true`)
     ##
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
