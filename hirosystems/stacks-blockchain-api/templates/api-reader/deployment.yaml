@@ -127,22 +127,22 @@ spec:
             - name: STACKS_ADDRESS_CACHE_SIZE
               value: {{ default "50000" .Values.apiReader.config.stacksAddressCacheSize | quote }}
             - name: PG_DATABASE
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_SCHEMA
-              value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_PRIMARY_HOST
-              value: {{ include "postgresql.v1.primary.fullname" .Subcharts.postgresql }}
+              value: {{ include "stacksBlockchainApi.postgresql.primary_host" . }}
             - name: PG_HOST
-              value: {{ include "common.names.fullname" .Subcharts.postgresql }}-all
+              value: {{ include "stacksBlockchainApi.postgresql.host" . }}
             - name: PG_PORT
-              value: {{ include "postgresql.v1.service.port" .Subcharts.postgresql | quote }}
+              value: {{ include "stacksBlockchainApi.postgresql.port" . | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql }}
-                  name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql }}
+                  key: {{ include "stacksBlockchainApi.postgresql.passwordSecretKey" . }}
+                  name: {{ include "stacksBlockchainApi.postgresql.passwordSecretName" . }}
             - name: PG_APPLICATION_NAME
               valueFrom:
                 fieldRef:
