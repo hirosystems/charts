@@ -1,9 +1,9 @@
 dependencies:
 - name: bitcoin-core
   repository: https://charts.hiro.so/hirosystems
-  version: 2.1.1
+  version: 2.1.6
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.20.4
-digest: sha256:98a1ce356690a920ac665a7c16ddbd325234eef8c7739488ad5a4657efa8ff68
-generated: "2024-07-15T13:10:02.339923-04:00"
+  version: 2.26.0
+digest: sha256:48465eb6980148f1ccdb593a64ce411028ca493947434d06315373a21a43978d
+generated: "2024-10-29T21:09:51.440842-04:00"

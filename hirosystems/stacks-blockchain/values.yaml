@@ -73,8 +73,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: blockstack/stacks-blockchain
-  tag: 2.5.0.0.5
+  repository: blockstack/stacks-core
+  tag: 3.0.0.0.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -403,9 +403,12 @@ initContainers: []
 
 ## @section Traffic Exposure Parameters
 
-## @param uniqueServices Create one service connecting to each stacks-blockchain pod
+## @param singleService Create one service connecting to each stacks-blockchain pod
 ##
 singleService: false
+## @param headlessService Create a headless service
+##
+headlessService: false
 ## @param uniqueServices Create a unique service for each stacks-blockchain pod
 ##
 uniqueServices: true
