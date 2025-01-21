@@ -41,7 +41,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-See https://github.com/hirosystems/charts/blob/main/hirosystems/stacks-blockchain/values.yaml to create the table
+See https://github.com/hirosystems/charts/blob/main/hirosystems/bitcoin-core/values.yaml
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
