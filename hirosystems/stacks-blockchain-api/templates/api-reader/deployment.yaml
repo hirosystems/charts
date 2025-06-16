@@ -4,11 +4,11 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}-reader
+  name: {{ template "common.names.fullname" . }}-ro
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: stacks-blockchain-api
-    hiro.so/stacks-blockchain-api-role: reader
+    hiro.so/stacks-blockchain-api-role: ro
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -25,7 +25,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: stacks-blockchain-api
-      hiro.so/stacks-blockchain-api-role: reader
+      hiro.so/stacks-blockchain-api-role: ro
   template:
     metadata:
       {{- if .Values.apiReader.podAnnotations }}
@@ -33,7 +33,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: stacks-blockchain-api
-        hiro.so/stacks-blockchain-api-role: reader
+        hiro.so/stacks-blockchain-api-role: ro
         {{- if .Values.apiReader.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -77,7 +77,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.apiReader.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: stacks-blockchain-api-reader
+        - name: stacks-blockchain-api
           image: {{ template "stacksBlockchainApi.image" . }}
           imagePullPolicy: {{ .Values.apiReader.image.pullPolicy }}
           {{- if .Values.apiReader.containerSecurityContext.enabled }}

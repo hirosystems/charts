@@ -33,7 +33,7 @@ The stacks-blockchain-api writer node(s) can be accessed via port {{ include "st
 {{- if .Values.apiReader.enabled }}
 The stacks-blockchain-api reader node(s) can be accessed via port {{ include "stacksBlockchainApi.apiReader.service.ports.api" . }} on the following DNS names from within your cluster:
 
-    {{ template "common.names.fullname" . }}-reader.{{ .Release.Namespace }}.svc.cluster.local - connection to stacks-blockchain-api reader pod(s)
+    {{ template "common.names.fullname" . }}-ro.{{ .Release.Namespace }}.svc.cluster.local - connection to stacks-blockchain-api reader pod(s)
 {{- end }}
 
 {{- end }}

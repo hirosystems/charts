@@ -35,7 +35,7 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}
             {{- if .Values.apiReader.enabled }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-reader" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-ro" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
             {{- else }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
             {{- end }}
@@ -44,7 +44,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-reader-rosetta" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-ro-rosetta" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
           {{- end }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}

@@ -5,7 +5,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: stacks-blockchain-api
-    hiro.so/stacks-blockchain-api-role: writer
+    hiro.so/stacks-blockchain-api-role: rw
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -77,4 +77,4 @@ spec:
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: stacks-blockchain-api
-    hiro.so/stacks-blockchain-api-role: writer
+    hiro.so/stacks-blockchain-api-role: rw

@@ -118,7 +118,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.2.0
+    tag: 8.11.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -460,7 +460,7 @@ apiWriter:
       enabled: true
       ## @param persistence.mountPath Path to mount the volume at.
       ##
-      mountPath: /hirosystems/api-writer/data
+      mountPath: /hirosystems/api-rw/data
       ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
       ##
       subPath: ""
@@ -502,7 +502,7 @@ apiWriter:
       enabled: true
       ## @param persistence.mountPath Path to mount the volume at.
       ##
-      mountPath: /hirosystems/api-writer/bns
+      mountPath: /hirosystems/api-rw/bns
       ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
       ##
       subPath: ""
@@ -614,7 +614,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.2.0
+    tag: 8.11.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -973,7 +973,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.2.0
+    tag: 8.11.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1558,7 +1558,7 @@ stacks-blockchain:
   #   peer_port = 8333
 
   #   [[events_observer]]
-  #   endpoint = "stacks-blockchain-api-writer:3700"
+  #   endpoint = "stacks-blockchain-api-rw:3700"
   #   retry_count = 255
   #   events_keys = ["*"]
 
