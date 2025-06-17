@@ -2,11 +2,11 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ template "common.names.fullname" . }}-writer
+  name: {{ template "common.names.fullname" . }}-rw
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: stacks-blockchain-api
-    hiro.so/stacks-blockchain-api-role: writer
+    hiro.so/stacks-blockchain-api-role: rw
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,7 +19,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: stacks-blockchain-api
-      hiro.so/stacks-blockchain-api-role: writer
+      hiro.so/stacks-blockchain-api-role: rw
   serviceName: {{ template "common.names.fullname" . }}
   {{- if .Values.apiWriter.updateStrategy }}
   updateStrategy: {{- toYaml .Values.apiWriter.updateStrategy | nindent 4 }}
@@ -31,7 +31,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: stacks-blockchain-api
-        hiro.so/stacks-blockchain-api-role: writer
+        hiro.so/stacks-blockchain-api-role: rw
         {{- if .Values.apiWriter.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -314,7 +314,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: stacks-blockchain-api-writer
+        - name: stacks-blockchain-api
           image: {{ template "stacksBlockchainApi.image" . }}
           imagePullPolicy: {{ .Values.apiWriter.image.pullPolicy }}
           {{- if .Values.apiWriter.containerSecurityContext.enabled }}

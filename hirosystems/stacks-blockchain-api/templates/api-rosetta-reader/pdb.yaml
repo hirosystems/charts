@@ -2,11 +2,11 @@
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-rosetta-reader
+  name: {{ include "common.names.fullname" . }}-rosetta-ro
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: stacks-blockchain-api
-    hiro.so/stacks-blockchain-api-role: rosetta-reader
+    hiro.so/stacks-blockchain-api-role: rosetta-ro
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -23,5 +23,5 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: stacks-blockchain-api
-      hiro.so/stacks-blockchain-api-role: rosetta-reader
+      hiro.so/stacks-blockchain-api-role: rosetta-ro
 {{- end }}
