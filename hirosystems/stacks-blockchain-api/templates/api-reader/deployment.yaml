@@ -126,6 +126,7 @@ spec:
               value: {{ ternary "1" "0" .Values.apiReader.config.enableNftMetadata | quote }}
             - name: STACKS_ADDRESS_CACHE_SIZE
               value: {{ default "50000" .Values.apiReader.config.stacksAddressCacheSize | quote }}
+            {{- if .Values.postgresql.enabled }}
             - name: PG_DATABASE
               value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
             - name: PG_SCHEMA
@@ -143,6 +144,7 @@ spec:
                 secretKeyRef:
                   key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql }}
                   name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql }}
+            {{- end }}
             - name: PG_APPLICATION_NAME
               valueFrom:
                 fieldRef:

@@ -126,6 +126,7 @@ spec:
               value: {{ ternary "1" "0" .Values.apiRosettaReader.config.enableNftMetadata | quote }}
             - name: STACKS_ADDRESS_CACHE_SIZE
               value: {{ default "50000" .Values.apiRosettaReader.config.stacksAddressCacheSize | quote }}
+            {{- if .Values.postgresql.enabled }}
             - name: PG_DATABASE
               value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
             - name: PG_SCHEMA
@@ -147,6 +148,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            {{- end }}
             - name: PG_CONNECTION_POOL_MAX
               value: {{ default "50" .Values.apiRosettaReader.config.pgConnectionPoolMax | quote }}
             - name: PG_STATEMENT_TIMEOUT

@@ -116,17 +116,19 @@ spec:
               value: {{ include "postgresql.v1.service.port" .Subcharts.postgresql | quote }}
             - name: PG_USER
               value: {{ include "stacksBlockchainApi.postgresql.username" . }}
+            {{- if .Values.postgresql.enabled }}
             - name: PG_DATABASE
               value: {{ include "postgresql.v1.database" .Subcharts.postgresql | quote }}
             - name: PG_SCHEMA
               value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
-            - name: PG_CONNECTION_POOL_MAX
-              value: {{ .Values.apiWriter.config.pgConnectionPoolMax | quote }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql | quote }}
                   name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql | quote }}
+            {{- end }}
+            - name: PG_CONNECTION_POOL_MAX
+              value: {{ .Values.apiWriter.config.pgConnectionPoolMax | quote }}
             - name: DATA_DIR
               value: {{ .Values.apiWriter.persistence.data.mountPath }}
           command:
@@ -363,6 +365,7 @@ spec:
               value: {{ default "50000" .Values.apiWriter.config.stacksAddressCacheSize | quote }}
             - name: STACKS_API_TOKEN_METADATA_STRICT_MODE
               value: {{ ternary "1" "0" .Values.apiWriter.config.enableTokenMetadataStrictMode | quote }}
+            {{- if .Values.postgresql.enabled }}
             - name: PG_DATABASE
               value: {{ include "postgresql.v1.database" .Subcharts.postgresql }}
             - name: PG_SCHEMA
@@ -380,6 +383,7 @@ spec:
                 secretKeyRef:
                   key: {{ include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql }}
                   name: {{ include "postgresql.v1.secretName" .Subcharts.postgresql }}
+            {{- end }}
             - name: PG_APPLICATION_NAME
               valueFrom:
                 fieldRef:
