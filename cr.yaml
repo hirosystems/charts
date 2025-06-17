@@ -1,1 +1,2 @@
 pages-index-path: hirosystems/index.yaml
+skip-existing: true
