@@ -88,9 +88,78 @@ Return name of the CDN secret
 Return name of the Postgres user
 */}}
 {{- define "stacksBlockchainApi.postgresql.username" -}}
-{{ default "postgres" (include "postgresql.v1.username" .Subcharts.postgresql) }}
+{{- if .Values.postgresql.enabled -}}
+    {{ default "postgres" (include "postgresql.v1.username" .Subcharts.postgresql) }}
+{{- else -}}
+    {{ default "postgres" .Values.connections.db_user }}
+{{- end -}}
 {{- end -}}
 
+{{/*
+Return name of the Postgres database name
+*/}}
+{{- define "stacksBlockchainApi.postgresql.database" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{ default "postgres" (include "postgresql.v1.database" .Subcharts.postgresql) }}
+{{- else -}}
+    {{ default "postgres" .Values.connections.db_name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return name of the Postgres host
+*/}}
+{{- define "stacksBlockchainApi.postgresql.host" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{ include "common.names.fullname" .Subcharts.postgresql }}-all
+{{- else -}}
+    {{ .Values.connections.db_host }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return name of the Postgres host
+*/}}
+{{- define "stacksBlockchainApi.postgresql.primary_host" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{ include "postgresql.v1.primary.fullname" .Subcharts.postgresql }}
+{{- else -}}
+    {{ default .Values.connections.db_host .Values.connections.db_primary_host }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return name of the Postgres port
+*/}}
+{{- define "stacksBlockchainApi.postgresql.port" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{ default 5432 (include "postgresql.v1.service.port" .Subcharts.postgresql) }}
+{{- else -}}
+    {{ default 5432 .Values.connections.db_port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return name of the k8s secret which includes Postgres password
+*/}}
+{{- define "stacksBlockchainApi.postgresql.passwordSecretName" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{ include "postgresql.v1.secretName" .Subcharts.postgresql }}
+{{- else -}}
+    {{ .Values.connections.db_password_secret_name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return name of the Postgres password key in k8s secret
+*/}}
+{{- define "stacksBlockchainApi.postgresql.passwordSecretKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{ default "password" (include "postgresql.v1.adminPasswordKey" .Subcharts.postgresql) }}
+{{- else -}}
+    {{ default "password" .Values.connections.db_password_secret_key }}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Compile all warnings into a single message.
