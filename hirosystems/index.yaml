@@ -2355,6 +2355,53 @@ entries:
       category: ApplicationServer
     apiVersion: v2
     appVersion: 8.11.1
+    created: "2025-06-18T18:15:51.869052294Z"
+    dependencies:
+    - condition: stacks-blockchain.enabled
+      name: stacks-blockchain
+      repository: https://charts.hiro.so/hirosystems
+      tags:
+      - hirosystems-stacks-blockchain
+      version: 2.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-postgresql
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: API for the Stacks blockchain
+    digest: 8c14cee42e83b6d365a6b4e94adeebb347f067cfcae6c106934a608e9b573882
+    home: https://github.com/hirosystems/stacks-blockchain-api
+    icon: https://raw.githubusercontent.com/hirosystems/docs/23569271aefa63e87626d2d7c598d18a4a852be5/public/home.svg
+    keywords:
+    - stacks
+    - stx
+    - blockchain
+    - hiro
+    - bitcoin
+    - bitcoind
+    - btc
+    - api
+    maintainers:
+    - name: Hiro Systems
+      url: https://github.com/hirosystems/charts
+    name: stacks-blockchain-api
+    sources:
+    - https://github.com/hirosystems/stacks-blockchain-api
+    - https://docs.hiro.so/api
+    - https://docs.hiro.so/get-started/stacks-blockchain-api
+    urls:
+    - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-6.2.0/stacks-blockchain-api-6.2.0.tgz
+    version: 6.2.0
+  - annotations:
+      category: ApplicationServer
+    apiVersion: v2
+    appVersion: 8.11.1
     created: "2025-06-17T15:30:37.389452872Z"
     dependencies:
     - condition: stacks-blockchain.enabled
@@ -5641,4 +5688,4 @@ entries:
     urls:
     - https://github.com/hirosystems/charts/releases/download/stacks-blockchain-api-0.1.0/stacks-blockchain-api-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-17T15:30:37.389740418Z"
+generated: "2025-06-18T18:15:51.869460345Z"
