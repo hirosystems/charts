@@ -353,10 +353,12 @@ spec:
               value: {{ default "0.0.0.0" .Values.apiWriter.config.bindAddress | quote }}
             - name: STACKS_PROFILER_PORT
               value: {{ default "9119" .Values.apiWriter.containerPorts.profiler | quote }}
+            {{- if (index .Values "stacks-blockchain").enabled }}
             - name: STACKS_CORE_RPC_HOST
               value: {{ include "stacksBlockchain.service.name" (index .Subcharts "stacks-blockchain") }}
             - name: STACKS_CORE_RPC_PORT
               value: {{ include "stacksBlockchain.service.ports.rpc" (index .Subcharts "stacks-blockchain") | quote }}
+            {{- end }}
             - name: STACKS_API_ENABLE_FT_METADATA
               value: {{ ternary "1" "0" .Values.apiWriter.config.enableFtMetadata | quote }}
             - name: STACKS_API_ENABLE_NFT_METADATA
