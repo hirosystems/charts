@@ -94,8 +94,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.apiRosettaReader.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: STACKS_READ_ONLY_MODE
-              value: "true"
+            {{- if .Values.apiRosettaReader.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apiRosettaReader.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            - name: STACKS_API_MODE
+              value: "readonly"
             - name: STACKS_API_LOG_LEVEL
               value: {{ ternary "debug" "info" (or .Values.apiRosettaReader.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: STACKS_CHAIN_ID
@@ -166,9 +169,6 @@ spec:
             {{- end }}
             - name: NODE_ENV
               value: production
-            {{- if .Values.apiRosettaReader.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.apiRosettaReader.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
           envFrom:
             {{- if .Values.apiRosettaReader.extraEnvVarsCM }}
             - configMapRef:

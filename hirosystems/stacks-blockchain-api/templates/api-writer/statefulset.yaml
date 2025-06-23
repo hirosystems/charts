@@ -331,6 +331,9 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            {{- if .Values.apiWriter.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
             - name: STACKS_API_LOG_LEVEL
               value: {{ ternary "debug" "info" (or .Values.apiWriter.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: STACKS_CHAIN_ID
@@ -363,8 +366,6 @@ spec:
               value: {{ ternary "1" "0" .Values.apiWriter.config.enableNftMetadata | quote }}
             - name: STACKS_ADDRESS_CACHE_SIZE
               value: {{ default "50000" .Values.apiWriter.config.stacksAddressCacheSize | quote }}
-            - name: STACKS_API_TOKEN_METADATA_STRICT_MODE
-              value: {{ ternary "1" "0" .Values.apiWriter.config.enableTokenMetadataStrictMode | quote }}
             - name: PG_DATABASE
               value: {{ include "stacksBlockchainApi.postgresql.database" . }}
             - name: PG_SCHEMA
@@ -406,9 +407,6 @@ spec:
             {{- if .Values.apiWriter.config.bns.enabled }}
             - name: BNS_IMPORT_DIR
               value: {{ .Values.apiWriter.persistence.bns.mountPath }}
-            {{- end }}
-            {{- if .Values.apiWriter.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.apiWriter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.apiWriter.extraEnvVarsCM }}
