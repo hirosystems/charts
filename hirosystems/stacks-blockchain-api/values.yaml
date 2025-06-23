@@ -103,7 +103,6 @@ apiWriter:
     enableFtMetadata: true
     enableNftMetadata: false
     bindAddress: "0.0.0.0"
-    enableTokenMetadataStrictMode: true
     pgConnectionPoolMax: "50"
     stacksAddressCacheSize: "50000"
   ## Hiro Systems Stacks Blockchain API Writer image
@@ -118,7 +117,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.1
+    tag: 8.11.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -614,7 +613,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.1
+    tag: 8.11.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -973,7 +972,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.1
+    tag: 8.11.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
