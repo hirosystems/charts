@@ -37,7 +37,7 @@ spec:
             {{- if .Values.apiReader.enabled }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-ro" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
             {{- else }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-rw" (include "common.names.fullname" .)) "servicePort" "http-api" "context" $)  | nindent 14 }}
             {{- end }}
           {{- if .Values.apiRosettaReader.enabled }}
           - path: {{ .Values.ingress.rosettaPath }}
