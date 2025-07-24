@@ -117,7 +117,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.2
+    tag: 8.11.5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -613,7 +613,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.2
+    tag: 8.11.5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -972,7 +972,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.2
+    tag: 8.11.5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
