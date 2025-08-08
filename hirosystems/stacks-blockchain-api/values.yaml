@@ -117,7 +117,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.5
+    tag: 8.12.0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -558,7 +558,7 @@ apiWriter:
     ##
     image:
       registry: docker.io
-      repository: bitnami/os-shell
+      repository: bitnamilegacy/os-shell
       tag: 11-debian-11-r110
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -613,7 +613,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.5
+    tag: 8.12.0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -972,7 +972,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.11.5
+    tag: 8.12.0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1578,6 +1578,8 @@ stacks-blockchain:
 ##
 postgresql:
   enabled: true
+  image:
+    repository: bitnamilegacy/postgresql
   ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
   ##
   extraDeploy:
