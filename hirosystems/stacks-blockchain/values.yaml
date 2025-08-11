@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: blockstack/stacks-core
-  tag: 3.0.0.0.0
+  tag: 3.2.0.0.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -647,7 +647,7 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    repository: bitnami/os-shell
+    repository: bitnamilegacy/os-shell
     tag: 11-debian-11-r110
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
