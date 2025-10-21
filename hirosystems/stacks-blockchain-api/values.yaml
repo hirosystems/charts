@@ -68,7 +68,7 @@ blockchainNetwork: mainnet
 apiWriter:
   enabled: true
   ## @param apiWriter.workloadType Workload type for API Writer (StatefulSet or Deployment)
-  ## When set to Deployment, volumeClaimTemplates are not used and persistence must be configured via existing claims or disabled
+  ## When set to Deployment, volumeClaimTemplates are not used and separate PVCs will be created and used instead
   ##
   workloadType: StatefulSet
   config:
