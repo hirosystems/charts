@@ -1,4 +1,8 @@
 annotations:
+  artifacthub.io/images: |
+    - name: bitnami/postgresql
+      image: bitnami/postgresql:15.4.0-debian-11-r45
+      whitelisted: true
   category: ApplicationServer
 apiVersion: v2
 appVersion: 8.12.0
