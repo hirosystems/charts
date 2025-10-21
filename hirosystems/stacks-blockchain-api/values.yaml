@@ -67,6 +67,10 @@ blockchainNetwork: mainnet
 ##
 apiWriter:
   enabled: true
+  ## @param apiWriter.workloadType Workload type for API Writer (StatefulSet or Deployment)
+  ## When set to Deployment, volumeClaimTemplates are not used and separate PVCs will be created and used instead
+  ##
+  workloadType: StatefulSet
   config:
     ## @param dataArchiveUrl Specify a URL from which to download a tar.gz archive of the stacks-blockchain-api TSV file before launching the server
     ##
@@ -117,7 +121,7 @@ apiWriter:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.12.0
+    tag: 8.13.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -379,12 +383,13 @@ apiWriter:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param apiWriter.updateStrategy.type Stacks Blockchain API Writer statefulset strategy type
+  ## @param apiWriter.updateStrategy.type Stacks Blockchain API Writer statefulset/deployment strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
+    ## Can be set to RollingUpdate or OnDelete if workloadType is StatefulSet
+    ## Or can be set to RollingUpdate or Recreate if workloadType is Deployment
     ##
     type: RollingUpdate
 
@@ -613,7 +618,7 @@ apiReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.12.0
+    tag: 8.13.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -972,7 +977,7 @@ apiRosettaReader:
   image:
     registry: docker.io
     repository: hirosystems/stacks-blockchain-api
-    tag: 8.12.0
+    tag: 8.13.2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

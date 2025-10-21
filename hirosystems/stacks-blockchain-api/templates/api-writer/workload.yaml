@@ -1,6 +1,11 @@
 {{- if .Values.apiWriter.enabled }}
+{{- if eq .Values.apiWriter.workloadType "Deployment" }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+{{- else }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
+{{- end }}
 metadata:
   name: {{ template "common.names.fullname" . }}-rw
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -15,14 +20,22 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- if ne .Values.apiWriter.workloadType "Deployment" }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: stacks-blockchain-api
       hiro.so/stacks-blockchain-api-role: rw
+  {{- if ne .Values.apiWriter.workloadType "Deployment" }}
   serviceName: {{ template "common.names.fullname" . }}
+  {{- end }}
   {{- if .Values.apiWriter.updateStrategy }}
+  {{- if eq .Values.apiWriter.workloadType "Deployment" }}
+  strategy: {{- toYaml .Values.apiWriter.updateStrategy | nindent 4 }}
+  {{- else }}
   updateStrategy: {{- toYaml .Values.apiWriter.updateStrategy | nindent 4 }}
+  {{- end }}
   {{- end }}
   template:
     metadata:
@@ -483,6 +496,9 @@ spec:
         {{- if and .Values.apiWriter.persistence.data.enabled .Values.apiWriter.persistence.data.existingClaim }}
           persistentVolumeClaim:
             claimName: {{ tpl .Values.apiWriter.persistence.data.existingClaim . }}
+        {{- else if and .Values.apiWriter.persistence.data.enabled (eq .Values.apiWriter.workloadType "Deployment") }}
+          persistentVolumeClaim:
+            claimName: data-{{ template "common.names.fullname" . }}
         {{- else if not .Values.apiWriter.persistence.data.enabled }}
           emptyDir: {}
         {{- end }}
@@ -490,10 +506,13 @@ spec:
         {{- if and .Values.apiWriter.persistence.bns.enabled .Values.apiWriter.persistence.bns.existingClaim }}
           persistentVolumeClaim:
             claimName: {{ tpl .Values.apiWriter.persistence.bns.existingClaim . }}
+        {{- else if and .Values.apiWriter.persistence.bns.enabled (eq .Values.apiWriter.workloadType "Deployment") }}
+          persistentVolumeClaim:
+            claimName: bns-data-{{ template "common.names.fullname" . }}
         {{- else if not .Values.apiWriter.persistence.bns.enabled }}
           emptyDir: {}
         {{- end }}
-  {{- if or (and .Values.apiWriter.persistence.data.enabled (not .Values.apiWriter.persistence.data.existingClaim)) (and .Values.apiWriter.persistence.bns.enabled (not .Values.apiWriter.persistence.bns.existingClaim)) }}
+  {{- if and (ne .Values.apiWriter.workloadType "Deployment") (or (and .Values.apiWriter.persistence.data.enabled (not .Values.apiWriter.persistence.data.existingClaim)) (and .Values.apiWriter.persistence.bns.enabled (not .Values.apiWriter.persistence.bns.existingClaim))) }}
   volumeClaimTemplates:
     {{- if and .Values.apiWriter.persistence.data.enabled (not .Values.apiWriter.persistence.data.existingClaim) }}
     - metadata:
